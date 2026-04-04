@@ -31,6 +31,11 @@
       </div>
 
       <div class="sidebar-card">
+        <h3>По стеку</h3>
+        <div id="agg-stacks"></div>
+      </div>
+
+      <div class="sidebar-card">
         <h3>По проекту</h3>
         <div id="agg-projects"></div>
       </div>
@@ -58,6 +63,9 @@
       <div class="toolbar">
         <input type="text" id="search" placeholder="Поиск по задачам, ID..." autocomplete="off">
         <div class="filters">
+          <select id="filter-stack">
+            <option value="">Все стеки</option>
+          </select>
           <select id="filter-project">
             <option value="">Все проекты</option>
           </select>
@@ -82,6 +90,19 @@
   </div>
 
   <script>
+    const projectStack = {
+      "booking":       "Java",
+      "ai_gateway":    "Web",
+      "json-formatter":"Web",
+      "release-notes": "КИАС",
+    };
+
+    const stackConfig = {
+      "Java": "#b45309",
+      "Web":  "#0369a1",
+      "КИАС": "#7c3aed",
+    };
+
     const releases = [
       // ── booking ──────────────────────────────────────────────
       {
@@ -246,10 +267,14 @@
     };
 
     // Populate selects
+    const allStacks   = [...new Set(Object.values(projectStack))].sort();
     const allProjects = [...new Set(releases.map(r => r.project))].sort();
     const allTeams    = [...new Set(releases.flatMap(r => r.tasks.map(t => t.team)))].sort();
     const allTypes    = [...new Set(releases.flatMap(r => r.tasks.map(t => t.type)))].sort();
 
+    allStacks.forEach(s => {
+      document.getElementById("filter-stack").insertAdjacentHTML("beforeend", `<option value="${s}">${s}</option>`);
+    });
     allProjects.forEach(p => {
       document.getElementById("filter-project").insertAdjacentHTML("beforeend", `<option value="${p}">${p}</option>`);
     });
@@ -260,17 +285,30 @@
       document.getElementById("filter-type").insertAdjacentHTML("beforeend", `<option value="${t}">${t}</option>`);
     });
 
-    // Update release select based on active project filter
-    function updateReleaseSelect(projectFilter) {
+    // Update project select based on stack filter
+    function updateProjectSelect(stackFilter) {
+      const sel = document.getElementById("filter-project");
+      const current = sel.value;
+      sel.innerHTML = '<option value="">Все проекты</option>';
+      allProjects
+        .filter(p => !stackFilter || projectStack[p] === stackFilter)
+        .forEach(p => {
+          sel.insertAdjacentHTML("beforeend", `<option value="${p}">${p}</option>`);
+        });
+      if ([...sel.options].some(o => o.value === current)) sel.value = current;
+      else sel.value = "";
+    }
+
+    // Update release select based on active project/stack filter
+    function updateReleaseSelect(projectFilter, stackFilter) {
       const sel = document.getElementById("filter-release");
       const current = sel.value;
       sel.innerHTML = '<option value="">Все релизы</option>';
       releases
-        .filter(r => !projectFilter || r.project === projectFilter)
+        .filter(r => (!projectFilter || r.project === projectFilter) && (!stackFilter || projectStack[r.project] === stackFilter))
         .forEach(r => {
           sel.insertAdjacentHTML("beforeend", `<option value="${r.version}|${r.project}">${r.project} ${r.version}</option>`);
         });
-      // restore if still valid
       if ([...sel.options].some(o => o.value === current)) sel.value = current;
       else sel.value = "";
     }
@@ -320,6 +358,7 @@
       document.getElementById("total-count").textContent = total;
       document.getElementById("total-releases").textContent = filtered.filter(r => r.tasks.length > 0).length;
 
+      renderAgg("agg-stacks",   t => projectStack[t._project] || "—", k => stackConfig[k] || "#6b7280", "filter-stack", allTasks);
       renderAgg("agg-projects", t => t._project, k => projectConfig[k] || "#6b7280", "filter-project", allTasks);
       renderAgg("agg-types",    t => t.type,      k => typeConfig[k]?.color || "#6b7280", "filter-type", allTasks);
       renderAgg("agg-teams",    t => t.team,      k => teamConfig[k] || "#6b7280", "filter-team", allTasks);
@@ -366,9 +405,12 @@
         const article = document.createElement("article");
         article.className = "release";
 
+        const stack = projectStack[release.project] || "";
+        const stackColor = stackConfig[stack] || "#6b7280";
         article.innerHTML = `
           <div class="release-header">
             <div class="release-meta">
+              <span class="project-badge" style="background:${stackColor}18;color:${stackColor};border:1px solid ${stackColor}30">${stack}</span>
               <span class="project-badge" style="background:${projColor}18;color:${projColor};border:1px solid ${projColor}30">${release.project}</span>
               <span class="version">${release.version}</span>
               <span class="date">${release.date}</span>
@@ -414,15 +456,17 @@
 
     function getFiltered() {
       const search        = document.getElementById("search").value.toLowerCase();
+      const stackFilter   = document.getElementById("filter-stack").value;
       const projectFilter = document.getElementById("filter-project").value;
       const releaseFilter = document.getElementById("filter-release").value;
       const teamFilter    = document.getElementById("filter-team").value;
       const typeFilter    = document.getElementById("filter-type").value;
 
       return releases.map(r => {
-        if (projectFilter && r.project !== projectFilter) return { ...r, tasks: [] };
+        if (stackFilter   && projectStack[r.project] !== stackFilter) return { ...r, tasks: [] };
+        if (projectFilter && r.project !== projectFilter)             return { ...r, tasks: [] };
         const releaseKey = `${r.version}|${r.project}`;
-        if (releaseFilter && releaseKey !== releaseFilter) return { ...r, tasks: [] };
+        if (releaseFilter && releaseKey !== releaseFilter)            return { ...r, tasks: [] };
         const tasks = r.tasks
           .filter(t => {
             if (teamFilter && t.team !== teamFilter) return false;
@@ -442,8 +486,16 @@
     }
 
     document.getElementById("search").addEventListener("input", applyFilters);
+    document.getElementById("filter-stack").addEventListener("change", () => {
+      const stack = document.getElementById("filter-stack").value;
+      updateProjectSelect(stack);
+      updateReleaseSelect(document.getElementById("filter-project").value, stack);
+      applyFilters();
+    });
     document.getElementById("filter-project").addEventListener("change", () => {
-      updateReleaseSelect(document.getElementById("filter-project").value);
+      const stack   = document.getElementById("filter-stack").value;
+      const project = document.getElementById("filter-project").value;
+      updateReleaseSelect(project, stack);
       applyFilters();
     });
     document.getElementById("filter-release").addEventListener("change", applyFilters);
@@ -451,15 +503,18 @@
     document.getElementById("filter-type").addEventListener("change", applyFilters);
     document.getElementById("reset-filters").addEventListener("click", () => {
       document.getElementById("search").value = "";
+      document.getElementById("filter-stack").value = "";
       document.getElementById("filter-project").value = "";
       document.getElementById("filter-release").value = "";
       document.getElementById("filter-team").value = "";
       document.getElementById("filter-type").value = "";
-      updateReleaseSelect("");
+      updateProjectSelect("");
+      updateReleaseSelect("", "");
       applyFilters();
     });
 
-    updateReleaseSelect("");
+    updateProjectSelect("");
+    updateReleaseSelect("", "");
     applyFilters();
   </script>
 </body>
