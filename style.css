@@ -15,7 +15,7 @@ body {
 header {
   background: #fff;
   border-bottom: 1px solid #e0e4ea;
-  padding: 24px 32px;
+  padding: 12px 32px;
 }
 
 .header-inner {
@@ -47,11 +47,11 @@ header h1 {
 /* Layout */
 .layout {
   max-width: 1280px;
-  margin: 28px auto;
+  margin: 16px auto;
   padding: 0 32px;
   display: grid;
   grid-template-columns: 240px 1fr;
-  gap: 24px;
+  gap: 16px;
   align-items: start;
 }
 
@@ -59,9 +59,9 @@ header h1 {
 .sidebar {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
   position: sticky;
-  top: 24px;
+  top: 12px;
   max-height: calc(100vh - 48px);
   overflow-y: auto;
   scrollbar-width: thin;
@@ -184,7 +184,7 @@ header h1 {
 .content {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
 }
 
 /* Toolbar */
