@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Release Notes</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Release Notes</h1>
+    <p class="subtitle">История изменений проекта</p>
+  </header>
+
+  <main>
+    <article class="release">
+      <div class="release-header">
+        <span class="version">v1.0.0</span>
+        <span class="date">2026-04-04</span>
+      </div>
+      <h2>Первый релиз</h2>
+      <ul>
+        <li>Инициализация проекта</li>
+        <li>Базовая страница release notes</li>
+        <li>Настройка автодеплоя через git</li>
+      </ul>
+    </article>
+  </main>
+
+  <footer>
+    <p>Обновлено: <span id="updated"></span></p>
+  </footer>
+
+  <script>
+    document.getElementById('updated').textContent = new Date().toLocaleString('ru');
+  </script>
+</body>
+</html>
