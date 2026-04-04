@@ -469,8 +469,13 @@
             </div>
             <h2>${release.title}</h2>
             <span class="task-count">${release.tasks.length} задач</span>
+            <span class="collapse-btn">▼</span>
           </div>
         `;
+
+        article.querySelector(".release-header").addEventListener("click", () => {
+          article.classList.toggle("collapsed");
+        });
 
         const list = document.createElement("ul");
         list.className = "task-list";
