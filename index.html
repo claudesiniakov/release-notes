@@ -462,7 +462,6 @@
         article.innerHTML = `
           <div class="release-header">
             <div class="release-meta">
-              <span class="project-badge" style="background:${stackColor}18;color:${stackColor};border:1px solid ${stackColor}30">${stack}</span>
               <span class="project-badge" style="background:${projColor}18;color:${projColor};border:1px solid ${projColor}30">${release.project}</span>
               <span class="version">${release.version}</span>
               <span class="date">${release.date}</span>
@@ -489,7 +488,7 @@
             <span class="task-type" style="background:${tc.bg};color:${tc.color};border:1px solid ${tc.color}30">${tc.label}</span>
             <a class="task-id" href="https://issues.example.com/${task.id}" target="_blank">${task.id}</a>
             <span class="task-text">${task.text}</span>
-            <span class="task-team" style="color:${teamColor}">${task.team}</span>
+            <span class="task-team" style="background:${teamColor}18;color:${teamColor};border:1px solid ${teamColor}30">${task.team}</span>
           `;
           list.appendChild(li);
         });

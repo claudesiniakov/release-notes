@@ -291,55 +291,65 @@ header h1 {
 }
 
 .release-header {
-  padding: 10px 14px 10px 18px;
+  padding: 10px 12px 10px 18px;
   border-bottom: 1px solid #e0e4ea;
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-wrap: wrap;
   background: #fafbfc;
   cursor: pointer;
   user-select: none;
+  transition: background 0.15s;
 }
 
 .release-header:hover {
-  background: #f3f4f6;
+  background: #f0f2f5;
 }
 
 .collapse-btn {
   margin-left: auto;
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
-  color: #9ca3af;
-  font-size: 0.7rem;
+  border-radius: 6px;
+  color: #6b7280;
+  font-size: 0.85rem;
   flex-shrink: 0;
-  transition: transform 0.2s, color 0.15s;
+  transition: transform 0.25s ease, background 0.15s;
 }
 
 .release-header:hover .collapse-btn {
-  color: #6b7280;
+  background: #e5e7eb;
+  color: #374151;
 }
 
 .release.collapsed .collapse-btn {
   transform: rotate(-90deg);
 }
 
-.release.collapsed .task-list {
-  display: none;
-}
-
 .release.collapsed .release-header {
   border-bottom: none;
+}
+
+/* Collapse animation */
+.task-list {
+  list-style: none;
+  overflow: hidden;
+  max-height: 4000px;
+  transition: max-height 0.3s ease;
+}
+
+.release.collapsed .task-list {
+  max-height: 0;
 }
 
 .release-meta {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .project-badge {
@@ -348,6 +358,7 @@ header h1 {
   padding: 2px 8px;
   border-radius: 6px;
   letter-spacing: 0.02em;
+  flex-shrink: 0;
 }
 
 .version {
@@ -357,11 +368,13 @@ header h1 {
   font-weight: 700;
   padding: 3px 9px;
   border-radius: 10px;
+  flex-shrink: 0;
 }
 
 .date {
   color: #9ca3af;
   font-size: 0.8rem;
+  flex-shrink: 0;
 }
 
 .release-header h2 {
@@ -369,6 +382,10 @@ header h1 {
   font-weight: 600;
   color: #111827;
   flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .task-count {
@@ -377,22 +394,21 @@ header h1 {
   background: #e5e7eb;
   padding: 2px 8px;
   border-radius: 10px;
+  flex-shrink: 0;
 }
 
 /* Task list */
-.task-list { list-style: none; }
-
 .task {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 9px 18px;
+  padding: 8px 18px;
   border-bottom: 1px solid #f3f4f6;
   transition: background 0.1s;
 }
 
 .task:last-child { border-bottom: none; }
-.task:hover { background: #f9fafb; }
+.task:hover { background: #f0f2f5; }
 
 .task-type {
   font-size: 0.68rem;
@@ -406,26 +422,41 @@ header h1 {
 }
 
 .task-id {
-  font-size: 0.75rem;
-  color: #2563eb;
+  font-size: 0.72rem;
+  color: #9ca3af;
   text-decoration: none;
   font-family: 'SF Mono', 'Fira Code', monospace;
   flex-shrink: 0;
-  min-width: 78px;
+  min-width: 86px;
+  transition: color 0.1s;
+}
+
+.task:hover .task-id {
+  color: #2563eb;
 }
 
 .task-id:hover { text-decoration: underline; }
 
 .task-text {
-  font-size: 0.88rem;
-  color: #374151;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #111827;
   flex: 1;
+  min-width: 0;
 }
 
 .task-team {
-  font-size: 0.73rem;
+  font-size: 0.71rem;
   font-weight: 600;
   flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: currentColor;
+}
+
+.task-team-inner {
+  color: #fff;
+  mix-blend-mode: normal;
 }
 
 /* Empty */
