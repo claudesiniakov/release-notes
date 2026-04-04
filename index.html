@@ -22,39 +22,47 @@
     <!-- Sidebar -->
     <aside class="sidebar">
 
-      <div class="sidebar-card">
-        <h3>Всего задач</h3>
-        <div class="stat-total">
-          <span class="big-num" id="total-count">0</span>
-          <span class="big-label">задач в <span id="total-releases">0</span> релизах</span>
+      <button class="sidebar-toggle" id="sidebar-toggle">
+        <span>Фильтры и статистика</span>
+        <span class="toggle-arrow">▼</span>
+      </button>
+
+      <div class="sidebar-cards" id="sidebar-cards">
+
+        <div class="sidebar-card">
+          <h3>Всего задач</h3>
+          <div class="stat-total">
+            <span class="big-num" id="total-count">0</span>
+            <span class="big-label">задач в <span id="total-releases">0</span> релизах</span>
+          </div>
         </div>
-      </div>
 
-      <div class="sidebar-card">
-        <h3>По стеку</h3>
-        <div id="agg-stacks"></div>
-      </div>
+        <div class="sidebar-card">
+          <h3>По стеку</h3>
+          <div id="agg-stacks"></div>
+        </div>
 
-      <div class="sidebar-card">
-        <h3>По продукту</h3>
-        <div id="agg-projects"></div>
-      </div>
+        <div class="sidebar-card">
+          <h3>По продукту</h3>
+          <div id="agg-projects"></div>
+        </div>
 
-      <div class="sidebar-card">
-        <h3>По типу</h3>
-        <div id="agg-types"></div>
-      </div>
+        <div class="sidebar-card">
+          <h3>По типу</h3>
+          <div id="agg-types"></div>
+        </div>
 
-      <div class="sidebar-card">
-        <h3>По команде</h3>
-        <div id="agg-teams"></div>
-      </div>
+        <div class="sidebar-card">
+          <h3>По команде</h3>
+          <div id="agg-teams"></div>
+        </div>
 
-      <div class="sidebar-card">
-        <h3>По релизу</h3>
-        <div id="agg-releases"></div>
-      </div>
+        <div class="sidebar-card">
+          <h3>По релизу</h3>
+          <div id="agg-releases"></div>
+        </div>
 
+      </div>
     </aside>
 
     <!-- Content -->
@@ -80,8 +88,9 @@
           </select>
           <button id="reset-filters">Сбросить</button>
         </div>
-        <div class="stats-bar">Показано: <span id="stats-count">0</span> задач</div>
       </div>
+
+      <div class="stats-bar">Показано: <strong id="stats-count">0</strong> задач</div>
 
       <div id="releases-container"></div>
       <div class="empty-state" id="empty-state" style="display:none">Ничего не найдено</div>
@@ -526,6 +535,23 @@
       const filtered = getFiltered();
       renderReleases(filtered);
       renderSidebar(filtered);
+      updateSelectStyles();
+    }
+
+    // Mobile sidebar toggle
+    const sidebarToggle = document.getElementById("sidebar-toggle");
+    const sidebarCards  = document.getElementById("sidebar-cards");
+    sidebarToggle.addEventListener("click", () => {
+      sidebarToggle.classList.toggle("open");
+      sidebarCards.classList.toggle("open");
+    });
+
+    // Highlight active selects
+    function updateSelectStyles() {
+      ["filter-stack", "filter-project", "filter-release", "filter-team", "filter-type"].forEach(id => {
+        const el = document.getElementById(id);
+        el.classList.toggle("active-filter", el.value !== "");
+      });
     }
 
     document.getElementById("search").addEventListener("input", applyFilters);

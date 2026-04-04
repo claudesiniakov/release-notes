@@ -117,10 +117,9 @@ header h1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 5px 0;
-  cursor: pointer;
   border-radius: 6px;
   padding: 5px 6px;
+  cursor: pointer;
   transition: background 0.1s;
 }
 
@@ -130,6 +129,15 @@ header h1 {
 
 .agg-row.active {
   background: #eff6ff;
+}
+
+.agg-row.active .agg-label {
+  font-weight: 600;
+  color: #1d4ed8;
+}
+
+.agg-row.active .agg-num {
+  color: #1d4ed8;
 }
 
 .agg-label {
@@ -231,6 +239,13 @@ header h1 {
 
 .filters select:focus { border-color: #3b82f6; }
 
+.filters select.active-filter {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
 #reset-filters {
   padding: 8px 12px;
   background: transparent;
@@ -248,9 +263,17 @@ header h1 {
 }
 
 .stats-bar {
-  font-size: 0.8rem;
-  color: #9ca3af;
-  padding-left: 2px;
+  font-size: 0.82rem;
+  color: #6b7280;
+  padding: 0 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stats-bar strong {
+  color: #111827;
+  font-weight: 700;
 }
 
 /* Release card */
@@ -374,8 +397,58 @@ header h1 {
   border-radius: 10px;
 }
 
+.sidebar-toggle {
+  display: none;
+}
+
 @media (max-width: 768px) {
-  .layout { grid-template-columns: 1fr; }
-  .sidebar { position: static; }
+  .layout {
+    grid-template-columns: 1fr;
+    margin-top: 16px;
+  }
+
+  .sidebar {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #e0e4ea;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    margin-bottom: 0;
+  }
+
+  .sidebar-toggle .toggle-arrow {
+    transition: transform 0.2s;
+    font-size: 0.75rem;
+    color: #9ca3af;
+  }
+
+  .sidebar-toggle.open .toggle-arrow {
+    transform: rotate(180deg);
+  }
+
+  .sidebar-cards {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  .sidebar-cards.open {
+    display: flex;
+  }
+
   .task-team { display: none; }
 }
