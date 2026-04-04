@@ -12,7 +12,7 @@
     <div class="header-inner">
       <div>
         <h1>Release Notes</h1>
-        <p class="subtitle">История изменений · 5 релизов</p>
+        <p class="subtitle" id="header-subtitle">История изменений</p>
       </div>
     </div>
   </header>
@@ -28,6 +28,11 @@
           <span class="big-num" id="total-count">0</span>
           <span class="big-label">задач в <span id="total-releases">0</span> релизах</span>
         </div>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>По проекту</h3>
+        <div id="agg-projects"></div>
       </div>
 
       <div class="sidebar-card">
@@ -53,6 +58,9 @@
       <div class="toolbar">
         <input type="text" id="search" placeholder="Поиск по задачам, ID..." autocomplete="off">
         <div class="filters">
+          <select id="filter-project">
+            <option value="">Все проекты</option>
+          </select>
           <select id="filter-release">
             <option value="">Все релизы</option>
           </select>
@@ -75,7 +83,101 @@
 
   <script>
     const releases = [
+      // ── booking ──────────────────────────────────────────────
       {
+        project: "booking",
+        version: "v3.1.0",
+        date: "2026-04-01",
+        title: "Новый флоу бронирования",
+        tasks: [
+          { id: "BK-210", type: "feat",     team: "Frontend", text: "Многошаговая форма бронирования с прогресс-баром" },
+          { id: "BK-211", type: "feat",     team: "Backend",  text: "API подтверждения брони с email-нотификацией" },
+          { id: "BK-212", type: "feat",     team: "Mobile",   text: "Экран выбора даты с calendar-picker" },
+          { id: "BK-213", type: "feat",     team: "Backend",  text: "Поддержка групповых бронирований (до 20 чел.)" },
+          { id: "BK-214", type: "fix",      team: "Backend",  text: "Двойное бронирование одного слота" },
+          { id: "BK-215", type: "fix",      team: "Frontend", text: "Некорректный timezone при выборе времени" },
+          { id: "BK-216", type: "perf",     team: "Backend",  text: "Оптимизация запроса доступных слотов (×4)" },
+          { id: "BK-217", type: "security", team: "Backend",  text: "Проверка прав доступа при редактировании чужой брони" },
+          { id: "BK-218", type: "chore",    team: "DevOps",   text: "Миграция БД: индексы на booking_date" },
+        ]
+      },
+      {
+        project: "booking",
+        version: "v3.0.1",
+        date: "2026-03-10",
+        title: "Хотфикс оплаты",
+        tasks: [
+          { id: "BK-200", type: "fix", team: "Backend",  text: "Зависание транзакции при таймауте банка" },
+          { id: "BK-201", type: "fix", team: "Frontend", text: "Спиннер не скрывается после ошибки оплаты" },
+          { id: "BK-202", type: "fix", team: "Mobile",   text: "Краш при возврате из платёжного экрана" },
+        ]
+      },
+      // ── ai_gateway ───────────────────────────────────────────
+      {
+        project: "ai_gateway",
+        version: "v1.4.0",
+        date: "2026-03-25",
+        title: "Мультимодальность и streaming",
+        tasks: [
+          { id: "AI-88",  type: "feat",     team: "Backend",  text: "Поддержка vision-запросов (base64 + URL)" },
+          { id: "AI-89",  type: "feat",     team: "Backend",  text: "Server-Sent Events для стриминга ответов" },
+          { id: "AI-90",  type: "feat",     team: "Frontend", text: "Компонент потокового вывода текста" },
+          { id: "AI-91",  type: "feat",     team: "DevOps",   text: "Горизонтальное масштабирование воркеров" },
+          { id: "AI-92",  type: "perf",     team: "Backend",  text: "Connection pooling к OpenAI API" },
+          { id: "AI-93",  type: "perf",     team: "Backend",  text: "Кеш эмбеддингов в pgvector" },
+          { id: "AI-94",  type: "fix",      team: "Backend",  text: "Потеря токенов при обрыве стрима" },
+          { id: "AI-95",  type: "security", team: "Backend",  text: "Маскировка API-ключей в логах" },
+          { id: "AI-96",  type: "security", team: "DevOps",   text: "Rate limiting по user_id (100 req/min)" },
+          { id: "AI-97",  type: "chore",    team: "Backend",  text: "Обновление клиента OpenAI до v4.x" },
+        ]
+      },
+      {
+        project: "ai_gateway",
+        version: "v1.3.0",
+        date: "2026-02-18",
+        title: "Роутинг и fallback модели",
+        tasks: [
+          { id: "AI-75",  type: "feat",  team: "Backend",  text: "Роутинг запросов по приоритету модели" },
+          { id: "AI-76",  type: "feat",  team: "Backend",  text: "Автоматический fallback при ошибке провайдера" },
+          { id: "AI-77",  type: "feat",  team: "Frontend", text: "Дашборд использования токенов по моделям" },
+          { id: "AI-78",  type: "perf",  team: "Backend",  text: "Async очередь для batch-запросов" },
+          { id: "AI-79",  type: "fix",   team: "Backend",  text: "Некорректный подсчёт токенов для GPT-4o" },
+          { id: "AI-80",  type: "chore", team: "DevOps",   text: "Prometheus метрики latency по моделям" },
+        ]
+      },
+      // ── json-formatter ───────────────────────────────────────
+      {
+        project: "json-formatter",
+        version: "v2.2.0",
+        date: "2026-03-15",
+        title: "Редактор и diff-режим",
+        tasks: [
+          { id: "JF-44",  type: "feat",  team: "Frontend", text: "Monaco editor с подсветкой синтаксиса JSON" },
+          { id: "JF-45",  type: "feat",  team: "Frontend", text: "Diff-режим: сравнение двух JSON документов" },
+          { id: "JF-46",  type: "feat",  team: "Frontend", text: "Схлопывание/раскрытие узлов дерева" },
+          { id: "JF-47",  type: "feat",  team: "Frontend", text: "Экспорт в YAML и CSV" },
+          { id: "JF-48",  type: "perf",  team: "Frontend", text: "Виртуализация дерева для файлов >1MB" },
+          { id: "JF-49",  type: "fix",   team: "Frontend", text: "Падение при разборе JSON с BOM" },
+          { id: "JF-50",  type: "fix",   team: "Frontend", text: "Неверная подсветка unicode-escape последовательностей" },
+          { id: "JF-51",  type: "chore", team: "DevOps",   text: "Обновление Monaco до v0.46" },
+        ]
+      },
+      {
+        project: "json-formatter",
+        version: "v2.1.0",
+        date: "2026-01-28",
+        title: "Поиск и история",
+        tasks: [
+          { id: "JF-35",  type: "feat",  team: "Frontend", text: "Поиск по ключам и значениям с подсветкой" },
+          { id: "JF-36",  type: "feat",  team: "Frontend", text: "История последних 10 документов (localStorage)" },
+          { id: "JF-37",  type: "feat",  team: "Design",   text: "Тёмная тема и системный авто-режим" },
+          { id: "JF-38",  type: "fix",   team: "Frontend", text: "Поиск не сбрасывается при вставке нового JSON" },
+          { id: "JF-39",  type: "chore", team: "Frontend", text: "Переход с webpack на vite" },
+        ]
+      },
+      // ── release-notes ────────────────────────────────────────
+      {
+        project: "release-notes",
         version: "v2.4.0",
         date: "2026-04-01",
         title: "Платёжный модуль и уведомления",
@@ -97,20 +199,7 @@
         ]
       },
       {
-        version: "v2.3.1",
-        date: "2026-03-18",
-        title: "Хотфикс стабильности",
-        tasks: [
-          { id: "HOT-55", type: "fix",   team: "Backend",  text: "500 на эндпоинте /api/orders при пустом body" },
-          { id: "HOT-56", type: "fix",   team: "Backend",  text: "Утечка соединений PostgreSQL при высокой нагрузке" },
-          { id: "HOT-57", type: "fix",   team: "Frontend", text: "Белый экран при переходе на страницу профиля" },
-          { id: "HOT-58", type: "fix",   team: "Mobile",   text: "Зависание приложения при потере сети" },
-          { id: "HOT-59", type: "fix",   team: "DevOps",   text: "Некорректный healthcheck контейнера worker" },
-          { id: "HOT-60", type: "fix",   team: "Backend",  text: "Неверный расчёт скидки для купонов типа PERCENT" },
-          { id: "HOT-61", type: "chore", team: "DevOps",   text: "Увеличение таймаута деплоя до 10 мин" },
-        ]
-      },
-      {
+        project: "release-notes",
         version: "v2.3.0",
         date: "2026-03-05",
         title: "Профили пользователей и аналитика",
@@ -131,50 +220,6 @@
           { id: "USR-93", type: "security", team: "Backend",  text: "Rate limiting на загрузку изображений (10/мин)" },
         ]
       },
-      {
-        version: "v2.2.0",
-        date: "2026-02-12",
-        title: "Поиск, фильтры и нотификации",
-        tasks: [
-          { id: "SRH-60", type: "feat",     team: "Backend",  text: "Полнотекстовый поиск через Elasticsearch" },
-          { id: "SRH-61", type: "feat",     team: "Backend",  text: "Фасетные фильтры по категориям и тегам" },
-          { id: "SRH-62", type: "feat",     team: "Frontend", text: "Компонент SearchBar с автодополнением" },
-          { id: "SRH-63", type: "feat",     team: "Frontend", text: "Страница результатов поиска с пагинацией" },
-          { id: "SRH-64", type: "feat",     team: "Mobile",   text: "Голосовой поиск на Android и iOS" },
-          { id: "SRH-65", type: "feat",     team: "Backend",  text: "Сервис уведомлений: email + in-app" },
-          { id: "SRH-66", type: "feat",     team: "Frontend", text: "Дропдаун уведомлений в шапке" },
-          { id: "SRH-67", type: "feat",     team: "Mobile",   text: "Центр уведомлений в мобильном" },
-          { id: "SRH-68", type: "perf",     team: "Backend",  text: "Асинхронная отправка email через очередь" },
-          { id: "SRH-69", type: "perf",     team: "Backend",  text: "Кеш поисковых запросов (Redis, 2 мин)" },
-          { id: "SRH-70", type: "fix",      team: "Frontend", text: "Дублирование результатов при быстром вводе" },
-          { id: "SRH-71", type: "fix",      team: "Mobile",   text: "Пустой экран при отсутствии результатов" },
-          { id: "SRH-72", type: "chore",    team: "DevOps",   text: "Деплой Elasticsearch 8.x кластера" },
-          { id: "SRH-73", type: "chore",    team: "Design",   text: "Обновление иконок поиска и фильтра" },
-          { id: "SRH-74", type: "security", team: "Backend",  text: "Санитизация поисковых запросов (NoSQL Injection)" },
-        ]
-      },
-      {
-        version: "v2.1.0",
-        date: "2026-01-20",
-        title: "Авторизация и онбординг",
-        tasks: [
-          { id: "AUTH-40", type: "feat",     team: "Backend",  text: "OAuth 2.0: Google и GitHub провайдеры" },
-          { id: "AUTH-41", type: "feat",     team: "Backend",  text: "JWT refresh token rotation" },
-          { id: "AUTH-42", type: "feat",     team: "Frontend", text: "Экран входа с соцсетями" },
-          { id: "AUTH-43", type: "feat",     team: "Frontend", text: "Онбординг: 4-шаговый визард после регистрации" },
-          { id: "AUTH-44", type: "feat",     team: "Mobile",   text: "Biometric auth (Face ID / Fingerprint)" },
-          { id: "AUTH-45", type: "feat",     team: "Mobile",   text: "Экран онбординга со swipe-слайдами" },
-          { id: "AUTH-46", type: "feat",     team: "Design",   text: "Иллюстрации для онбординга (5 шт)" },
-          { id: "AUTH-47", type: "feat",     team: "Backend",  text: "2FA через TOTP (Google Authenticator)" },
-          { id: "AUTH-48", type: "security", team: "Backend",  text: "Блокировка аккаунта после 5 неудачных входов" },
-          { id: "AUTH-49", type: "security", team: "Backend",  text: "Хранение паролей bcrypt cost=12" },
-          { id: "AUTH-50", type: "security", team: "DevOps",   text: "WAF правила против brute-force атак" },
-          { id: "AUTH-51", type: "fix",      team: "Backend",  text: "Токен не инвалидируется при смене пароля" },
-          { id: "AUTH-52", type: "fix",      team: "Frontend", text: "Форма регистрации не сбрасывается после ошибки" },
-          { id: "AUTH-53", type: "perf",     team: "Backend",  text: "Сессионный кеш пользователя в Redis" },
-          { id: "AUTH-54", type: "chore",    team: "DevOps",   text: "Настройка CORS для prod-домена" },
-        ]
-      }
     ];
 
     const typeConfig = {
@@ -193,13 +238,20 @@
       Design:   "#be185d",
     };
 
-    // Populate selects
-    const allVersions = releases.map(r => r.version);
-    const allTeams = [...new Set(releases.flatMap(r => r.tasks.map(t => t.team)))].sort();
-    const allTypes = [...new Set(releases.flatMap(r => r.tasks.map(t => t.type)))].sort();
+    const projectConfig = {
+      "booking":       "#0f766e",
+      "ai_gateway":    "#7c3aed",
+      "json-formatter":"#b45309",
+      "release-notes": "#2563eb",
+    };
 
-    allVersions.forEach(v => {
-      document.getElementById("filter-release").insertAdjacentHTML("beforeend", `<option value="${v}">${v}</option>`);
+    // Populate selects
+    const allProjects = [...new Set(releases.map(r => r.project))].sort();
+    const allTeams    = [...new Set(releases.flatMap(r => r.tasks.map(t => t.team)))].sort();
+    const allTypes    = [...new Set(releases.flatMap(r => r.tasks.map(t => t.type)))].sort();
+
+    allProjects.forEach(p => {
+      document.getElementById("filter-project").insertAdjacentHTML("beforeend", `<option value="${p}">${p}</option>`);
     });
     allTeams.forEach(t => {
       document.getElementById("filter-team").insertAdjacentHTML("beforeend", `<option value="${t}">${t}</option>`);
@@ -208,7 +260,59 @@
       document.getElementById("filter-type").insertAdjacentHTML("beforeend", `<option value="${t}">${t}</option>`);
     });
 
-    // Sidebar aggregation
+    // Update release select based on active project filter
+    function updateReleaseSelect(projectFilter) {
+      const sel = document.getElementById("filter-release");
+      const current = sel.value;
+      sel.innerHTML = '<option value="">Все релизы</option>';
+      releases
+        .filter(r => !projectFilter || r.project === projectFilter)
+        .forEach(r => {
+          sel.insertAdjacentHTML("beforeend", `<option value="${r.version}|${r.project}">${r.project} ${r.version}</option>`);
+        });
+      // restore if still valid
+      if ([...sel.options].some(o => o.value === current)) sel.value = current;
+      else sel.value = "";
+    }
+
+    function renderAgg(containerId, keyFn, colorFn, filterId, allTasks) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
+      const counts = {};
+      allTasks.forEach(t => {
+        const key = keyFn(t);
+        counts[key] = (counts[key] || 0) + 1;
+      });
+      const max = Math.max(...Object.values(counts), 1);
+      Object.entries(counts).sort((a, b) => b[1] - a[1]).forEach(([key, count]) => {
+        const color = colorFn(key);
+        const barWidth = Math.round((count / max) * 56);
+        const sel = document.getElementById(filterId);
+        const isActive = sel && sel.value === key;
+        const row = document.createElement("div");
+        row.className = "agg-row" + (isActive ? " active" : "");
+        row.innerHTML = `
+          <span class="agg-label">
+            <span class="agg-dot" style="background:${color}"></span>
+            ${key}
+          </span>
+          <span class="agg-bar-wrap">
+            <span class="agg-bar" style="width:${barWidth}px;background:${color}20;border:1px solid ${color}40"></span>
+            <span class="agg-num">${count}</span>
+          </span>
+        `;
+        if (filterId) {
+          row.addEventListener("click", () => {
+            const s = document.getElementById(filterId);
+            s.value = s.value === key ? "" : key;
+            if (filterId === "filter-project") updateReleaseSelect(s.value);
+            applyFilters();
+          });
+        }
+        container.appendChild(row);
+      });
+    }
+
     function renderSidebar(filtered) {
       const allTasks = filtered.flatMap(r => r.tasks);
       const total = allTasks.length;
@@ -216,61 +320,29 @@
       document.getElementById("total-count").textContent = total;
       document.getElementById("total-releases").textContent = filtered.filter(r => r.tasks.length > 0).length;
 
-      function renderAgg(containerId, keys, colorFn, activeFilter, filterId) {
-        const container = document.getElementById(containerId);
-        container.innerHTML = "";
-        const counts = {};
-        allTasks.forEach(t => {
-          const key = keys(t);
-          counts[key] = (counts[key] || 0) + 1;
-        });
-        const max = Math.max(...Object.values(counts), 1);
-        Object.entries(counts).sort((a, b) => b[1] - a[1]).forEach(([key, count]) => {
-          const color = colorFn(key);
-          const barWidth = Math.round((count / max) * 60);
-          const isActive = document.getElementById(filterId).value === key;
-          const row = document.createElement("div");
-          row.className = "agg-row" + (isActive ? " active" : "");
-          row.innerHTML = `
-            <span class="agg-label">
-              <span class="agg-dot" style="background:${color}"></span>
-              ${key}
-            </span>
-            <span class="agg-bar-wrap">
-              <span class="agg-bar" style="width:${barWidth}px;background:${color}20;border:1px solid ${color}40"></span>
-              <span class="agg-num">${count}</span>
-            </span>
-          `;
-          row.addEventListener("click", () => {
-            const sel = document.getElementById(filterId);
-            sel.value = sel.value === key ? "" : key;
-            applyFilters();
-          });
-          container.appendChild(row);
-        });
-      }
-
-      renderAgg("agg-types", t => t.type, k => typeConfig[k]?.color || "#6b7280", null, "filter-type");
-      renderAgg("agg-teams", t => t.team, k => teamConfig[k] || "#6b7280", null, "filter-team");
+      renderAgg("agg-projects", t => t._project, k => projectConfig[k] || "#6b7280", "filter-project", allTasks);
+      renderAgg("agg-types",    t => t.type,      k => typeConfig[k]?.color || "#6b7280", "filter-type", allTasks);
+      renderAgg("agg-teams",    t => t.team,      k => teamConfig[k] || "#6b7280", "filter-team", allTasks);
 
       // releases agg
       const relContainer = document.getElementById("agg-releases");
       relContainer.innerHTML = "";
-      filtered.forEach(r => {
-        if (r.tasks.length === 0 && document.getElementById("filter-release").value !== r.version) return;
-        const isActive = document.getElementById("filter-release").value === r.version;
+      filtered.filter(r => r.tasks.length > 0).forEach(r => {
+        const color = projectConfig[r.project] || "#2563eb";
+        const releaseKey = `${r.version}|${r.project}`;
+        const isActive = document.getElementById("filter-release").value === releaseKey;
         const row = document.createElement("div");
         row.className = "agg-row" + (isActive ? " active" : "");
         row.innerHTML = `
           <span class="agg-label">
-            <span class="agg-dot" style="background:#2563eb"></span>
-            ${r.version}
+            <span class="agg-dot" style="background:${color}"></span>
+            <span style="color:#9ca3af;font-size:0.75rem;margin-right:2px">${r.project}</span>${r.version}
           </span>
           <span class="agg-num">${r.tasks.length}</span>
         `;
         row.addEventListener("click", () => {
           const sel = document.getElementById("filter-release");
-          sel.value = sel.value === r.version ? "" : r.version;
+          sel.value = sel.value === releaseKey ? "" : releaseKey;
           applyFilters();
         });
         relContainer.appendChild(row);
@@ -289,6 +361,7 @@
         if (release.tasks.length === 0) return;
         anyVisible = true;
         totalCount += release.tasks.length;
+        const projColor = projectConfig[release.project] || "#2563eb";
 
         const article = document.createElement("article");
         article.className = "release";
@@ -296,6 +369,7 @@
         article.innerHTML = `
           <div class="release-header">
             <div class="release-meta">
+              <span class="project-badge" style="background:${projColor}18;color:${projColor};border:1px solid ${projColor}30">${release.project}</span>
               <span class="version">${release.version}</span>
               <span class="date">${release.date}</span>
             </div>
@@ -326,23 +400,37 @@
       });
 
       document.getElementById("stats-count").textContent = totalCount;
+
+      // update subtitle
+      const projectFilter = document.getElementById("filter-project").value;
+      const total = releases.reduce((s, r) => s + r.tasks.length, 0);
+      document.getElementById("header-subtitle").textContent =
+        projectFilter
+          ? `Проект: ${projectFilter} · ${totalCount} задач`
+          : `${allProjects.length} проектов · ${totalCount} задач`;
+
       empty.style.display = anyVisible ? "none" : "block";
     }
 
     function getFiltered() {
-      const search = document.getElementById("search").value.toLowerCase();
+      const search        = document.getElementById("search").value.toLowerCase();
+      const projectFilter = document.getElementById("filter-project").value;
       const releaseFilter = document.getElementById("filter-release").value;
-      const teamFilter = document.getElementById("filter-team").value;
-      const typeFilter = document.getElementById("filter-type").value;
+      const teamFilter    = document.getElementById("filter-team").value;
+      const typeFilter    = document.getElementById("filter-type").value;
 
       return releases.map(r => {
-        if (releaseFilter && r.version !== releaseFilter) return { ...r, tasks: [] };
-        const tasks = r.tasks.filter(t => {
-          if (teamFilter && t.team !== teamFilter) return false;
-          if (typeFilter && t.type !== typeFilter) return false;
-          if (search && !t.text.toLowerCase().includes(search) && !t.id.toLowerCase().includes(search)) return false;
-          return true;
-        });
+        if (projectFilter && r.project !== projectFilter) return { ...r, tasks: [] };
+        const releaseKey = `${r.version}|${r.project}`;
+        if (releaseFilter && releaseKey !== releaseFilter) return { ...r, tasks: [] };
+        const tasks = r.tasks
+          .filter(t => {
+            if (teamFilter && t.team !== teamFilter) return false;
+            if (typeFilter && t.type !== typeFilter) return false;
+            if (search && !t.text.toLowerCase().includes(search) && !t.id.toLowerCase().includes(search)) return false;
+            return true;
+          })
+          .map(t => ({ ...t, _project: r.project }));
         return { ...r, tasks };
       });
     }
@@ -354,17 +442,24 @@
     }
 
     document.getElementById("search").addEventListener("input", applyFilters);
+    document.getElementById("filter-project").addEventListener("change", () => {
+      updateReleaseSelect(document.getElementById("filter-project").value);
+      applyFilters();
+    });
     document.getElementById("filter-release").addEventListener("change", applyFilters);
     document.getElementById("filter-team").addEventListener("change", applyFilters);
     document.getElementById("filter-type").addEventListener("change", applyFilters);
     document.getElementById("reset-filters").addEventListener("click", () => {
       document.getElementById("search").value = "";
+      document.getElementById("filter-project").value = "";
       document.getElementById("filter-release").value = "";
       document.getElementById("filter-team").value = "";
       document.getElementById("filter-type").value = "";
+      updateReleaseSelect("");
       applyFilters();
     });
 
+    updateReleaseSelect("");
     applyFilters();
   </script>
 </body>
