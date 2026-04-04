@@ -57,15 +57,18 @@ header h1 {
 
 /* Sidebar */
 .sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
   position: sticky;
   top: 12px;
-  max-height: calc(100vh - 48px);
+  max-height: calc(100vh - 24px);
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #e0e4ea transparent;
+}
+
+.sidebar-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .sidebar::-webkit-scrollbar {
@@ -477,8 +480,6 @@ header h1 {
 
   .sidebar-cards {
     display: none;
-    flex-direction: column;
-    gap: 16px;
     margin-top: 8px;
   }
 
