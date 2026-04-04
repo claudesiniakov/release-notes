@@ -9,89 +9,240 @@ body {
   background: #0d1117;
   color: #e6edf3;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
+/* Header */
 header {
-  padding: 48px 24px 32px;
-  text-align: center;
   border-bottom: 1px solid #21262d;
+  padding: 36px 24px 28px;
+}
+
+.header-inner {
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 header h1 {
-  font-size: 2rem;
-  font-weight: 600;
+  font-size: 1.8rem;
+  font-weight: 700;
   color: #f0f6fc;
 }
 
 .subtitle {
-  margin-top: 8px;
+  margin-top: 6px;
   color: #8b949e;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
-main {
-  max-width: 720px;
-  width: 100%;
-  margin: 40px auto;
+/* Toolbar */
+.toolbar {
+  max-width: 900px;
+  margin: 24px auto 0;
   padding: 0 24px;
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
+#search {
+  width: 100%;
+  padding: 10px 14px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  color: #e6edf3;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+#search:focus {
+  border-color: #388bfd;
+}
+
+#search::placeholder {
+  color: #484f58;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filters select {
+  padding: 8px 12px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  color: #e6edf3;
+  font-size: 0.85rem;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.filters select:focus {
+  border-color: #388bfd;
+}
+
+#reset-filters {
+  padding: 8px 14px;
+  background: transparent;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  color: #8b949e;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+#reset-filters:hover {
+  border-color: #8b949e;
+  color: #e6edf3;
+}
+
+/* Stats */
+.stats-bar {
+  max-width: 900px;
+  margin: 16px auto 0;
+  padding: 0 24px;
+  font-size: 0.82rem;
+  color: #8b949e;
+}
+
+/* Main */
+main {
+  max-width: 900px;
+  margin: 24px auto 48px;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Release card */
 .release {
   background: #161b22;
   border: 1px solid #21262d;
-  border-radius: 8px;
-  padding: 24px;
-  margin-bottom: 24px;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .release-header {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid #21262d;
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.release-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .version {
   background: #1f6feb;
   color: #fff;
-  font-size: 0.85rem;
-  font-weight: 600;
-  padding: 2px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 3px 10px;
   border-radius: 12px;
+  letter-spacing: 0.02em;
 }
 
 .date {
   color: #8b949e;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
 }
 
-.release h2 {
-  font-size: 1.1rem;
+.release-header h2 {
+  font-size: 1rem;
   font-weight: 600;
-  margin-bottom: 12px;
   color: #f0f6fc;
+  flex: 1;
 }
 
-.release ul {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.release ul li::before {
-  content: '•';
-  color: #1f6feb;
-  margin-right: 8px;
-}
-
-footer {
-  text-align: center;
-  padding: 24px;
-  border-top: 1px solid #21262d;
+.task-count {
+  font-size: 0.78rem;
   color: #8b949e;
-  font-size: 0.8rem;
+  background: #21262d;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+/* Task list */
+.task-list {
+  list-style: none;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  border-bottom: 1px solid #21262d;
+  transition: background 0.1s;
+}
+
+.task:last-child {
+  border-bottom: none;
+}
+
+.task:hover {
+  background: #1c2128;
+}
+
+.task-type {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+  min-width: 62px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.task-id {
+  font-size: 0.78rem;
+  color: #388bfd;
+  text-decoration: none;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  flex-shrink: 0;
+  min-width: 80px;
+}
+
+.task-id:hover {
+  text-decoration: underline;
+}
+
+.task-text {
+  font-size: 0.9rem;
+  color: #c9d1d9;
+  flex: 1;
+}
+
+.task-team {
+  font-size: 0.75rem;
+  font-weight: 600;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+/* Empty */
+.empty-state {
+  text-align: center;
+  padding: 64px 24px;
+  color: #8b949e;
+  font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .task-team { display: none; }
+  .task-id   { min-width: 60px; }
 }

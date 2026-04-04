@@ -7,32 +7,263 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <header>
-    <h1>Release Notes</h1>
-    <p class="subtitle">История изменений проекта</p>
+    <div class="header-inner">
+      <div>
+        <h1>Release Notes</h1>
+        <p class="subtitle">История изменений · 5 релизов</p>
+      </div>
+    </div>
   </header>
 
-  <main>
-    <article class="release">
-      <div class="release-header">
-        <span class="version">v1.0.0</span>
-        <span class="date">2026-04-04</span>
-      </div>
-      <h2>Первый релиз</h2>
-      <ul>
-        <li>Инициализация проекта</li>
-        <li>Базовая страница release notes</li>
-        <li>Настройка автодеплоя через git</li>
-      </ul>
-    </article>
-  </main>
+  <div class="toolbar">
+    <input type="text" id="search" placeholder="Поиск по задачам..." autocomplete="off">
+    <div class="filters">
+      <select id="filter-release">
+        <option value="">Все релизы</option>
+        <option value="v2.4.0">v2.4.0</option>
+        <option value="v2.3.1">v2.3.1</option>
+        <option value="v2.3.0">v2.3.0</option>
+        <option value="v2.2.0">v2.2.0</option>
+        <option value="v2.1.0">v2.1.0</option>
+      </select>
+      <select id="filter-team">
+        <option value="">Все команды</option>
+        <option value="Frontend">Frontend</option>
+        <option value="Backend">Backend</option>
+        <option value="Mobile">Mobile</option>
+        <option value="DevOps">DevOps</option>
+        <option value="Design">Design</option>
+      </select>
+      <select id="filter-type">
+        <option value="">Все типы</option>
+        <option value="feat">feat</option>
+        <option value="fix">fix</option>
+        <option value="perf">perf</option>
+        <option value="chore">chore</option>
+        <option value="security">security</option>
+      </select>
+      <button id="reset-filters">Сбросить</button>
+    </div>
+  </div>
 
-  <footer>
-    <p>Обновлено: <span id="updated"></span></p>
-  </footer>
+  <div class="stats-bar" id="stats-bar">
+    Показано: <span id="stats-count">0</span> задач
+  </div>
+
+  <main id="releases-container"></main>
+
+  <div class="empty-state" id="empty-state" style="display:none">
+    Ничего не найдено
+  </div>
 
   <script>
-    document.getElementById('updated').textContent = new Date().toLocaleString('ru');
+    const releases = [
+      {
+        version: "v2.4.0",
+        date: "2026-04-01",
+        title: "Платёжный модуль и уведомления",
+        tasks: [
+          { id: "PAY-101", type: "feat", team: "Backend",  text: "Интеграция с платёжным шлюзом Stripe" },
+          { id: "PAY-102", type: "feat", team: "Backend",  text: "Поддержка возвратов и частичных возвратов" },
+          { id: "PAY-103", type: "feat", team: "Frontend", text: "Форма оплаты с валидацией карты" },
+          { id: "PAY-104", type: "feat", team: "Frontend", text: "Страница истории транзакций" },
+          { id: "PAY-105", type: "feat", team: "Mobile",   text: "Push-уведомления об успешной оплате" },
+          { id: "PAY-106", type: "feat", team: "Mobile",   text: "Apple Pay / Google Pay на экране оформления" },
+          { id: "PAY-107", type: "fix",  team: "Backend",  text: "Дублирование платежей при повторном запросе" },
+          { id: "PAY-108", type: "fix",  team: "Frontend", text: "Кнопка «Оплатить» не блокируется после клика" },
+          { id: "PAY-109", type: "security", team: "Backend", text: "Шифрование данных карты в transit (TLS 1.3)" },
+          { id: "PAY-110", type: "security", team: "DevOps",  text: "Вынос секретов Stripe в Vault" },
+          { id: "PAY-111", type: "perf",  team: "Backend",  text: "Кеширование курсов валют (Redis, TTL 5 мин)" },
+          { id: "PAY-112", type: "chore", team: "DevOps",   text: "Обновление sdk stripe до v12" },
+          { id: "PAY-113", type: "feat",  team: "Design",   text: "Новые иллюстрации для статусов оплаты" },
+          { id: "PAY-114", type: "fix",   team: "Mobile",   text: "Краш на iOS 16 при открытии чека" },
+        ]
+      },
+      {
+        version: "v2.3.1",
+        date: "2026-03-18",
+        title: "Хотфикс стабильности",
+        tasks: [
+          { id: "HOT-55", type: "fix", team: "Backend",  text: "500 на эндпоинте /api/orders при пустом body" },
+          { id: "HOT-56", type: "fix", team: "Backend",  text: "Утечка соединений PostgreSQL при высокой нагрузке" },
+          { id: "HOT-57", type: "fix", team: "Frontend", text: "Белый экран при переходе на страницу профиля" },
+          { id: "HOT-58", type: "fix", team: "Mobile",   text: "Зависание приложения при потере сети" },
+          { id: "HOT-59", type: "fix", team: "DevOps",   text: "Некорректный healthcheck контейнера worker" },
+          { id: "HOT-60", type: "fix", team: "Backend",  text: "Неверный расчёт скидки для купонов типа PERCENT" },
+          { id: "HOT-61", type: "chore", team: "DevOps", text: "Увеличение таймаута деплоя до 10 мин" },
+        ]
+      },
+      {
+        version: "v2.3.0",
+        date: "2026-03-05",
+        title: "Профили пользователей и аналитика",
+        tasks: [
+          { id: "USR-80", type: "feat", team: "Backend",  text: "API профиля: аватар, bio, ссылки" },
+          { id: "USR-81", type: "feat", team: "Backend",  text: "Эндпоинт /me с агрегированной статистикой" },
+          { id: "USR-82", type: "feat", team: "Frontend", text: "Страница публичного профиля пользователя" },
+          { id: "USR-83", type: "feat", team: "Frontend", text: "Редактор профиля с crop-фото" },
+          { id: "USR-84", type: "feat", team: "Mobile",   text: "Экран профиля в мобильном приложении" },
+          { id: "USR-85", type: "feat", team: "Mobile",   text: "Виджет активности за последние 30 дней" },
+          { id: "USR-86", type: "feat", team: "Design",   text: "Дизайн-система: компонент Avatar (S/M/L/XL)" },
+          { id: "USR-87", type: "feat", team: "Design",   text: "Иконки бейджей и достижений" },
+          { id: "USR-88", type: "perf", team: "Backend",  text: "Индексы на user_id в таблицах events и sessions" },
+          { id: "USR-89", type: "perf", team: "Frontend", text: "Lazy-load аватаров в списках" },
+          { id: "USR-90", type: "fix",  team: "Backend",  text: "Некорректная дата регистрации в UTC±0" },
+          { id: "USR-91", type: "fix",  team: "Frontend", text: "Переполнение текста в длинных именах" },
+          { id: "USR-92", type: "chore", team: "DevOps",  text: "S3-бакет для хранения аватаров + CDN" },
+          { id: "USR-93", type: "security", team: "Backend", text: "Rate limiting на загрузку изображений (10/мин)" },
+        ]
+      },
+      {
+        version: "v2.2.0",
+        date: "2026-02-12",
+        title: "Поиск, фильтры и нотификации",
+        tasks: [
+          { id: "SRH-60", type: "feat", team: "Backend",  text: "Полнотекстовый поиск через Elasticsearch" },
+          { id: "SRH-61", type: "feat", team: "Backend",  text: "Фасетные фильтры по категориям и тегам" },
+          { id: "SRH-62", type: "feat", team: "Frontend", text: "Компонент SearchBar с автодополнением" },
+          { id: "SRH-63", type: "feat", team: "Frontend", text: "Страница результатов поиска с пагинацией" },
+          { id: "SRH-64", type: "feat", team: "Mobile",   text: "Голосовой поиск на Android и iOS" },
+          { id: "SRH-65", type: "feat", team: "Backend",  text: "Сервис уведомлений: email + in-app" },
+          { id: "SRH-66", type: "feat", team: "Frontend", text: "Дропдаун уведомлений в шапке" },
+          { id: "SRH-67", type: "feat", team: "Mobile",   text: "Центр уведомлений в мобильном" },
+          { id: "SRH-68", type: "perf", team: "Backend",  text: "Асинхронная отправка email через очередь" },
+          { id: "SRH-69", type: "perf", team: "Backend",  text: "Кеш поисковых запросов (Redis, 2 мин)" },
+          { id: "SRH-70", type: "fix",  team: "Frontend", text: "Дублирование результатов при быстром вводе" },
+          { id: "SRH-71", type: "fix",  team: "Mobile",   text: "Пустой экран при отсутствии результатов" },
+          { id: "SRH-72", type: "chore", team: "DevOps",  text: "Деплой Elasticsearch 8.x кластера" },
+          { id: "SRH-73", type: "chore", team: "Design",  text: "Обновление иконок поиска и фильтра" },
+          { id: "SRH-74", type: "security", team: "Backend", text: "Санитизация поисковых запросов (NoSQL Injection)" },
+        ]
+      },
+      {
+        version: "v2.1.0",
+        date: "2026-01-20",
+        title: "Авторизация и онбординг",
+        tasks: [
+          { id: "AUTH-40", type: "feat", team: "Backend",  text: "OAuth 2.0: Google и GitHub провайдеры" },
+          { id: "AUTH-41", type: "feat", team: "Backend",  text: "JWT refresh token rotation" },
+          { id: "AUTH-42", type: "feat", team: "Frontend", text: "Экран входа с соцсетями" },
+          { id: "AUTH-43", type: "feat", team: "Frontend", text: "Онбординг: 4-шаговый визард после регистрации" },
+          { id: "AUTH-44", type: "feat", team: "Mobile",   text: "Biometric auth (Face ID / Fingerprint)" },
+          { id: "AUTH-45", type: "feat", team: "Mobile",   text: "Экран онбординга со swipe-слайдами" },
+          { id: "AUTH-46", type: "feat", team: "Design",   text: "Иллюстрации для онбординга (5 шт)" },
+          { id: "AUTH-47", type: "feat", team: "Backend",  text: "2FA через TOTP (Google Authenticator)" },
+          { id: "AUTH-48", type: "security", team: "Backend", text: "Блокировка аккаунта после 5 неудачных входов" },
+          { id: "AUTH-49", type: "security", team: "Backend", text: "Хранение паролей bcrypt cost=12" },
+          { id: "AUTH-50", type: "security", team: "DevOps",  text: "WAF правила против brute-force атак" },
+          { id: "AUTH-51", type: "fix",  team: "Backend",  text: "Токен не инвалидируется при смене пароля" },
+          { id: "AUTH-52", type: "fix",  team: "Frontend", text: "Форма регистрации не сбрасывается после ошибки" },
+          { id: "AUTH-53", type: "perf", team: "Backend",  text: "Сессионный кеш пользователя в Redis" },
+          { id: "AUTH-54", type: "chore", team: "DevOps",  text: "Настройка CORS для prod-домена" },
+        ]
+      }
+    ];
+
+    const typeColors = {
+      feat:     { bg: "#1a3a1a", color: "#4caf50", label: "feat" },
+      fix:      { bg: "#3a1a1a", color: "#f44336", label: "fix" },
+      perf:     { bg: "#1a2a3a", color: "#2196f3", label: "perf" },
+      chore:    { bg: "#2a2a2a", color: "#9e9e9e", label: "chore" },
+      security: { bg: "#3a2a1a", color: "#ff9800", label: "security" },
+    };
+
+    const teamColors = {
+      Frontend: "#7c3aed",
+      Backend:  "#0369a1",
+      Mobile:   "#0f766e",
+      DevOps:   "#b45309",
+      Design:   "#be185d",
+    };
+
+    function renderReleases(data) {
+      const container = document.getElementById("releases-container");
+      const empty = document.getElementById("empty-state");
+      container.innerHTML = "";
+
+      let totalCount = 0;
+      let anyVisible = false;
+
+      data.forEach(release => {
+        if (release.tasks.length === 0) return;
+        anyVisible = true;
+        totalCount += release.tasks.length;
+
+        const article = document.createElement("article");
+        article.className = "release";
+
+        const header = document.createElement("div");
+        header.className = "release-header";
+        header.innerHTML = `
+          <div class="release-meta">
+            <span class="version">${release.version}</span>
+            <span class="date">${release.date}</span>
+          </div>
+          <h2>${release.title}</h2>
+          <span class="task-count">${release.tasks.length} задач</span>
+        `;
+        article.appendChild(header);
+
+        const list = document.createElement("ul");
+        list.className = "task-list";
+
+        release.tasks.forEach(task => {
+          const tc = typeColors[task.type] || typeColors.chore;
+          const teamColor = teamColors[task.team] || "#666";
+          const li = document.createElement("li");
+          li.className = "task";
+          li.innerHTML = `
+            <span class="task-type" style="background:${tc.bg};color:${tc.color}">${tc.label}</span>
+            <a class="task-id" href="https://issues.example.com/${task.id}" target="_blank">${task.id}</a>
+            <span class="task-text">${task.text}</span>
+            <span class="task-team" style="color:${teamColor}">${task.team}</span>
+          `;
+          list.appendChild(li);
+        });
+
+        article.appendChild(list);
+        container.appendChild(article);
+      });
+
+      document.getElementById("stats-count").textContent = totalCount;
+      empty.style.display = anyVisible ? "none" : "block";
+    }
+
+    function applyFilters() {
+      const search = document.getElementById("search").value.toLowerCase();
+      const release = document.getElementById("filter-release").value;
+      const team = document.getElementById("filter-team").value;
+      const type = document.getElementById("filter-type").value;
+
+      const filtered = releases.map(r => {
+        if (release && r.version !== release) return { ...r, tasks: [] };
+        const tasks = r.tasks.filter(t => {
+          if (team && t.team !== team) return false;
+          if (type && t.type !== type) return false;
+          if (search && !t.text.toLowerCase().includes(search) && !t.id.toLowerCase().includes(search)) return false;
+          return true;
+        });
+        return { ...r, tasks };
+      });
+
+      renderReleases(filtered);
+    }
+
+    document.getElementById("search").addEventListener("input", applyFilters);
+    document.getElementById("filter-release").addEventListener("change", applyFilters);
+    document.getElementById("filter-team").addEventListener("change", applyFilters);
+    document.getElementById("filter-type").addEventListener("change", applyFilters);
+    document.getElementById("reset-filters").addEventListener("click", () => {
+      document.getElementById("search").value = "";
+      document.getElementById("filter-release").value = "";
+      document.getElementById("filter-team").value = "";
+      document.getElementById("filter-type").value = "";
+      applyFilters();
+    });
+
+    renderReleases(releases);
   </script>
 </body>
 </html>
