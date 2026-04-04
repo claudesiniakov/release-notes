@@ -12,7 +12,7 @@
     <div class="header-inner">
       <div>
         <h1>Release Notes</h1>
-        <p class="subtitle" id="header-subtitle">История изменений</p>
+        <p class="subtitle" id="header-subtitle">История изменений · 9 продуктов</p>
       </div>
     </div>
   </header>
@@ -36,7 +36,7 @@
       </div>
 
       <div class="sidebar-card">
-        <h3>По проекту</h3>
+        <h3>По продукту</h3>
         <div id="agg-projects"></div>
       </div>
 
@@ -67,7 +67,7 @@
             <option value="">Все стеки</option>
           </select>
           <select id="filter-project">
-            <option value="">Все проекты</option>
+            <option value="">Все продукты</option>
           </select>
           <select id="filter-release">
             <option value="">Все релизы</option>
@@ -91,10 +91,15 @@
 
   <script>
     const projectStack = {
-      "booking":       "Java",
-      "ai_gateway":    "Web",
-      "json-formatter":"Web",
-      "release-notes": "КИАС",
+      "ИФЛ":        "КИАС",
+      "Урегулирование": "КИАС",
+      "B2B":        "Web",
+      "Моторы":     "Java",
+      "Сайт":       "Web",
+      "ДМС":        "КИАС",
+      "МП ДМС":     "Web",
+      "УОС":        "Java",
+      "Новый ПШ":   "Java",
     };
 
     const stackConfig = {
@@ -104,141 +109,174 @@
     };
 
     const releases = [
-      // ── booking ──────────────────────────────────────────────
+      // ── ИФЛ ─────────────────────────────────────────────────
       {
-        project: "booking",
-        version: "v3.1.0",
-        date: "2026-04-01",
-        title: "Новый флоу бронирования",
+        project: "ИФЛ", version: "v4.2.0", date: "2026-04-01", title: "Калькулятор ИФЛ и электронный полис",
         tasks: [
-          { id: "BK-210", type: "feat",     team: "Frontend", text: "Многошаговая форма бронирования с прогресс-баром" },
-          { id: "BK-211", type: "feat",     team: "Backend",  text: "API подтверждения брони с email-нотификацией" },
-          { id: "BK-212", type: "feat",     team: "Mobile",   text: "Экран выбора даты с calendar-picker" },
-          { id: "BK-213", type: "feat",     team: "Backend",  text: "Поддержка групповых бронирований (до 20 чел.)" },
-          { id: "BK-214", type: "fix",      team: "Backend",  text: "Двойное бронирование одного слота" },
-          { id: "BK-215", type: "fix",      team: "Frontend", text: "Некорректный timezone при выборе времени" },
-          { id: "BK-216", type: "perf",     team: "Backend",  text: "Оптимизация запроса доступных слотов (×4)" },
-          { id: "BK-217", type: "security", team: "Backend",  text: "Проверка прав доступа при редактировании чужой брони" },
-          { id: "BK-218", type: "chore",    team: "DevOps",   text: "Миграция БД: индексы на booking_date" },
+          { id: "ИФЛ-310", type: "feat",     team: "Backend",  text: "Расчёт страховой премии по тарифной сетке 2026" },
+          { id: "ИФЛ-311", type: "feat",     team: "Frontend", text: "Новый калькулятор ИФЛ с пошаговым оформлением" },
+          { id: "ИФЛ-312", type: "feat",     team: "Backend",  text: "Генерация электронного полиса в PDF" },
+          { id: "ИФЛ-313", type: "feat",     team: "Mobile",   text: "Просмотр и скачивание полиса в мобильном приложении" },
+          { id: "ИФЛ-314", type: "fix",      team: "Backend",  text: "Неверный расчёт коэффициента для возраста 70+" },
+          { id: "ИФЛ-315", type: "fix",      team: "Frontend", text: "Поле ИНН не валидируется при вводе" },
+          { id: "ИФЛ-316", type: "perf",     team: "Backend",  text: "Кеш тарифных таблиц (Redis, TTL 24ч)" },
+          { id: "ИФЛ-317", type: "security", team: "Backend",  text: "Шифрование персональных данных страхователя (AES-256)" },
+          { id: "ИФЛ-318", type: "chore",    team: "DevOps",   text: "Обновление шаблонов полисов под требования ЦБ 2026" },
         ]
       },
       {
-        project: "booking",
-        version: "v3.0.1",
-        date: "2026-03-10",
-        title: "Хотфикс оплаты",
+        project: "ИФЛ", version: "v4.1.1", date: "2026-02-20", title: "Хотфикс пролонгации",
         tasks: [
-          { id: "BK-200", type: "fix", team: "Backend",  text: "Зависание транзакции при таймауте банка" },
-          { id: "BK-201", type: "fix", team: "Frontend", text: "Спиннер не скрывается после ошибки оплаты" },
-          { id: "BK-202", type: "fix", team: "Mobile",   text: "Краш при возврате из платёжного экрана" },
+          { id: "ИФЛ-300", type: "fix", team: "Backend",  text: "Ошибка пролонгации полиса при смене страховой суммы" },
+          { id: "ИФЛ-301", type: "fix", team: "Frontend", text: "Дата окончания полиса отображается на день меньше" },
+          { id: "ИФЛ-302", type: "fix", team: "Backend",  text: "Дублирование записи при повторной отправке заявки" },
         ]
       },
-      // ── ai_gateway ───────────────────────────────────────────
+      // ── Урегулирование ──────────────────────────────────────
       {
-        project: "ai_gateway",
-        version: "v1.4.0",
-        date: "2026-03-25",
-        title: "Мультимодальность и streaming",
+        project: "Урегулирование", version: "v3.5.0", date: "2026-03-18", title: "Автоматизация выплат и документооборот",
         tasks: [
-          { id: "AI-88",  type: "feat",     team: "Backend",  text: "Поддержка vision-запросов (base64 + URL)" },
-          { id: "AI-89",  type: "feat",     team: "Backend",  text: "Server-Sent Events для стриминга ответов" },
-          { id: "AI-90",  type: "feat",     team: "Frontend", text: "Компонент потокового вывода текста" },
-          { id: "AI-91",  type: "feat",     team: "DevOps",   text: "Горизонтальное масштабирование воркеров" },
-          { id: "AI-92",  type: "perf",     team: "Backend",  text: "Connection pooling к OpenAI API" },
-          { id: "AI-93",  type: "perf",     team: "Backend",  text: "Кеш эмбеддингов в pgvector" },
-          { id: "AI-94",  type: "fix",      team: "Backend",  text: "Потеря токенов при обрыве стрима" },
-          { id: "AI-95",  type: "security", team: "Backend",  text: "Маскировка API-ключей в логах" },
-          { id: "AI-96",  type: "security", team: "DevOps",   text: "Rate limiting по user_id (100 req/min)" },
-          { id: "AI-97",  type: "chore",    team: "Backend",  text: "Обновление клиента OpenAI до v4.x" },
+          { id: "УРГ-201", type: "feat",     team: "Backend",  text: "Автоматический расчёт суммы выплаты по убытку" },
+          { id: "УРГ-202", type: "feat",     team: "Backend",  text: "Интеграция с СМЭВ для получения справок" },
+          { id: "УРГ-203", type: "feat",     team: "Frontend", text: "Личный кабинет урегулирования для клиента" },
+          { id: "УРГ-204", type: "feat",     team: "Frontend", text: "Загрузка документов по убытку (drag & drop)" },
+          { id: "УРГ-205", type: "feat",     team: "Backend",  text: "Статусная модель убытка: 9 состояний" },
+          { id: "УРГ-206", type: "fix",      team: "Backend",  text: "Некорректная сумма выплаты при наличии франшизы" },
+          { id: "УРГ-207", type: "fix",      team: "Frontend", text: "Документы не прикрепляются при размере >10MB" },
+          { id: "УРГ-208", type: "perf",     team: "Backend",  text: "Индексы на таблице убытков (claim_date, policy_id)" },
+          { id: "УРГ-209", type: "security", team: "DevOps",   text: "Аудит-лог изменений суммы выплаты" },
+          { id: "УРГ-210", type: "chore",    team: "DevOps",   text: "Миграция хранилища документов на S3" },
         ]
       },
+      // ── B2B ─────────────────────────────────────────────────
       {
-        project: "ai_gateway",
-        version: "v1.3.0",
-        date: "2026-02-18",
-        title: "Роутинг и fallback модели",
+        project: "B2B", version: "v2.3.0", date: "2026-03-25", title: "Портал партнёров и отчётность",
         tasks: [
-          { id: "AI-75",  type: "feat",  team: "Backend",  text: "Роутинг запросов по приоритету модели" },
-          { id: "AI-76",  type: "feat",  team: "Backend",  text: "Автоматический fallback при ошибке провайдера" },
-          { id: "AI-77",  type: "feat",  team: "Frontend", text: "Дашборд использования токенов по моделям" },
-          { id: "AI-78",  type: "perf",  team: "Backend",  text: "Async очередь для batch-запросов" },
-          { id: "AI-79",  type: "fix",   team: "Backend",  text: "Некорректный подсчёт токенов для GPT-4o" },
-          { id: "AI-80",  type: "chore", team: "DevOps",   text: "Prometheus метрики latency по моделям" },
+          { id: "B2B-150", type: "feat",     team: "Frontend", text: "Личный кабинет брокера с дашбордом продаж" },
+          { id: "B2B-151", type: "feat",     team: "Backend",  text: "API выгрузки реестра полисов в Excel/CSV" },
+          { id: "B2B-152", type: "feat",     team: "Backend",  text: "Управление агентской сетью: иерархия и роли" },
+          { id: "B2B-153", type: "feat",     team: "Frontend", text: "Конструктор отчётов по продуктам и периодам" },
+          { id: "B2B-154", type: "feat",     team: "Backend",  text: "Расчёт агентского вознаграждения по схемам" },
+          { id: "B2B-155", type: "fix",      team: "Backend",  text: "Неверный КВ при ручной корректировке тарифа" },
+          { id: "B2B-156", type: "fix",      team: "Frontend", text: "Таблица полисов не обновляется после фильтрации" },
+          { id: "B2B-157", type: "perf",     team: "Backend",  text: "Асинхронная генерация тяжёлых отчётов (очередь)" },
+          { id: "B2B-158", type: "security", team: "Backend",  text: "Разграничение доступа к данным по агентской сети" },
+          { id: "B2B-159", type: "chore",    team: "DevOps",   text: "Настройка SSO через корпоративный LDAP" },
         ]
       },
-      // ── json-formatter ───────────────────────────────────────
+      // ── Моторы ──────────────────────────────────────────────
       {
-        project: "json-formatter",
-        version: "v2.2.0",
-        date: "2026-03-15",
-        title: "Редактор и diff-режим",
+        project: "Моторы", version: "v5.1.0", date: "2026-04-01", title: "ОСАГО онлайн и телематика",
         tasks: [
-          { id: "JF-44",  type: "feat",  team: "Frontend", text: "Monaco editor с подсветкой синтаксиса JSON" },
-          { id: "JF-45",  type: "feat",  team: "Frontend", text: "Diff-режим: сравнение двух JSON документов" },
-          { id: "JF-46",  type: "feat",  team: "Frontend", text: "Схлопывание/раскрытие узлов дерева" },
-          { id: "JF-47",  type: "feat",  team: "Frontend", text: "Экспорт в YAML и CSV" },
-          { id: "JF-48",  type: "perf",  team: "Frontend", text: "Виртуализация дерева для файлов >1MB" },
-          { id: "JF-49",  type: "fix",   team: "Frontend", text: "Падение при разборе JSON с BOM" },
-          { id: "JF-50",  type: "fix",   team: "Frontend", text: "Неверная подсветка unicode-escape последовательностей" },
-          { id: "JF-51",  type: "chore", team: "DevOps",   text: "Обновление Monaco до v0.46" },
+          { id: "МТР-420", type: "feat",     team: "Backend",  text: "Расчёт ОСАГО через АИС РСА (прямой канал)" },
+          { id: "МТР-421", type: "feat",     team: "Frontend", text: "Форма оформления ОСАГО за 5 минут" },
+          { id: "МТР-422", type: "feat",     team: "Mobile",   text: "Телематический модуль: сбор данных о стиле вождения" },
+          { id: "МТР-423", type: "feat",     team: "Backend",  text: "Скидка по телематике: расчёт КТ по 3 месяцам" },
+          { id: "МТР-424", type: "feat",     team: "Mobile",   text: "Push-уведомление о приближении срока окончания ОСАГО" },
+          { id: "МТР-425", type: "fix",      team: "Backend",  text: "КБМ не применяется при нескольких водителях" },
+          { id: "МТР-426", type: "fix",      team: "Frontend", text: "VIN-номер не проходит валидацию для авто до 2000г" },
+          { id: "МТР-427", type: "perf",     team: "Backend",  text: "Кеш ответов РСА (30 мин) для снижения нагрузки" },
+          { id: "МТР-428", type: "security", team: "DevOps",   text: "Шифрование канала обмена с АИС РСА (ГОСТ)" },
+          { id: "МТР-429", type: "chore",    team: "Backend",  text: "Обновление справочника марок/моделей ТС 2026" },
+          { id: "МТР-430", type: "chore",    team: "DevOps",   text: "Переход на Java 21 LTS" },
         ]
       },
       {
-        project: "json-formatter",
-        version: "v2.1.0",
-        date: "2026-01-28",
-        title: "Поиск и история",
+        project: "Моторы", version: "v5.0.2", date: "2026-02-28", title: "Хотфикс КБМ",
         tasks: [
-          { id: "JF-35",  type: "feat",  team: "Frontend", text: "Поиск по ключам и значениям с подсветкой" },
-          { id: "JF-36",  type: "feat",  team: "Frontend", text: "История последних 10 документов (localStorage)" },
-          { id: "JF-37",  type: "feat",  team: "Design",   text: "Тёмная тема и системный авто-режим" },
-          { id: "JF-38",  type: "fix",   team: "Frontend", text: "Поиск не сбрасывается при вставке нового JSON" },
-          { id: "JF-39",  type: "chore", team: "Frontend", text: "Переход с webpack на vite" },
+          { id: "МТР-410", type: "fix", team: "Backend",  text: "КБМ сбрасывается при изменении страхователя" },
+          { id: "МТР-411", type: "fix", team: "Backend",  text: "Ошибка 500 при запросе КБМ для ИП" },
+          { id: "МТР-412", type: "fix", team: "Frontend", text: "Некорректная маска ввода номера водительского удостоверения" },
         ]
       },
-      // ── release-notes ────────────────────────────────────────
+      // ── Сайт ────────────────────────────────────────────────
       {
-        project: "release-notes",
-        version: "v2.4.0",
-        date: "2026-04-01",
-        title: "Платёжный модуль и уведомления",
+        project: "Сайт", version: "v6.4.0", date: "2026-03-15", title: "Редизайн главной и SEO",
         tasks: [
-          { id: "PAY-101", type: "feat",     team: "Backend",  text: "Интеграция с платёжным шлюзом Stripe" },
-          { id: "PAY-102", type: "feat",     team: "Backend",  text: "Поддержка возвратов и частичных возвратов" },
-          { id: "PAY-103", type: "feat",     team: "Frontend", text: "Форма оплаты с валидацией карты" },
-          { id: "PAY-104", type: "feat",     team: "Frontend", text: "Страница истории транзакций" },
-          { id: "PAY-105", type: "feat",     team: "Mobile",   text: "Push-уведомления об успешной оплате" },
-          { id: "PAY-106", type: "feat",     team: "Mobile",   text: "Apple Pay / Google Pay на экране оформления" },
-          { id: "PAY-107", type: "fix",      team: "Backend",  text: "Дублирование платежей при повторном запросе" },
-          { id: "PAY-108", type: "fix",      team: "Frontend", text: "Кнопка «Оплатить» не блокируется после клика" },
-          { id: "PAY-109", type: "security", team: "Backend",  text: "Шифрование данных карты в transit (TLS 1.3)" },
-          { id: "PAY-110", type: "security", team: "DevOps",   text: "Вынос секретов Stripe в Vault" },
-          { id: "PAY-111", type: "perf",     team: "Backend",  text: "Кеширование курсов валют (Redis, TTL 5 мин)" },
-          { id: "PAY-112", type: "chore",    team: "DevOps",   text: "Обновление sdk stripe до v12" },
-          { id: "PAY-113", type: "feat",     team: "Design",   text: "Новые иллюстрации для статусов оплаты" },
-          { id: "PAY-114", type: "fix",      team: "Mobile",   text: "Краш на iOS 16 при открытии чека" },
+          { id: "СТ-330", type: "feat",  team: "Frontend", text: "Новая главная страница по дизайн-системе 3.0" },
+          { id: "СТ-331", type: "feat",  team: "Frontend", text: "Блок «Онлайн-калькуляторы» с быстрым расчётом" },
+          { id: "СТ-332", type: "feat",  team: "Backend",  text: "Динамические SEO-мета-теги через CMS" },
+          { id: "СТ-333", type: "feat",  team: "Design",   text: "Новые иллюстрации продуктовых страниц (12 шт.)" },
+          { id: "СТ-334", type: "feat",  team: "Frontend", text: "Виджет онлайн-чата (интеграция с поддержкой)" },
+          { id: "СТ-335", type: "perf",  team: "Frontend", text: "Core Web Vitals: LCP < 2.5s, CLS < 0.1" },
+          { id: "СТ-336", type: "perf",  team: "DevOps",   text: "CDN для статики: CloudFront + кеш 30 дней" },
+          { id: "СТ-337", type: "fix",   team: "Frontend", text: "Мобильное меню не закрывается при переходе" },
+          { id: "СТ-338", type: "fix",   team: "Frontend", text: "Форма обратного звонка не отправляется в Safari" },
+          { id: "СТ-339", type: "chore", team: "DevOps",   text: "Обновление Next.js до v15" },
+        ]
+      },
+      // ── ДМС ─────────────────────────────────────────────────
+      {
+        project: "ДМС", version: "v3.8.0", date: "2026-03-20", title: "Личный кабинет ДМС и телемедицина",
+        tasks: [
+          { id: "ДМС-180", type: "feat",     team: "Backend",  text: "API записи к врачу через партнёрские клиники" },
+          { id: "ДМС-181", type: "feat",     team: "Frontend", text: "ЛК застрахованного: история обращений и лимиты" },
+          { id: "ДМС-182", type: "feat",     team: "Backend",  text: "Телемедицина: видеоконсультация через WebRTC" },
+          { id: "ДМС-183", type: "feat",     team: "Backend",  text: "Проверка страхового покрытия в реальном времени" },
+          { id: "ДМС-184", type: "feat",     team: "Design",   text: "Карточки врачей с рейтингом и отзывами" },
+          { id: "ДМС-185", type: "fix",      team: "Backend",  text: "Лимит по программе не обновляется после визита" },
+          { id: "ДМС-186", type: "fix",      team: "Frontend", text: "Список клиник не фильтруется по специализации" },
+          { id: "ДМС-187", type: "perf",     team: "Backend",  text: "Кеш справочника клиник и врачей (Redis)" },
+          { id: "ДМС-188", type: "security", team: "Backend",  text: "Соответствие 152-ФЗ: согласие на обработку ПД" },
+          { id: "ДМС-189", type: "chore",    team: "DevOps",   text: "Интеграционные тесты с 3 партнёрскими клиниками" },
+        ]
+      },
+      // ── МП ДМС ──────────────────────────────────────────────
+      {
+        project: "МП ДМС", version: "v2.1.0", date: "2026-04-01", title: "Карта клиник и уведомления",
+        tasks: [
+          { id: "МПД-90",  type: "feat",     team: "Mobile",   text: "Карта клиник с геолокацией и маршрутом" },
+          { id: "МПД-91",  type: "feat",     team: "Mobile",   text: "Push-уведомления о записи к врачу" },
+          { id: "МПД-92",  type: "feat",     team: "Backend",  text: "API синхронизации расписания врачей (real-time)" },
+          { id: "МПД-93",  type: "feat",     team: "Mobile",   text: "Цифровой полис ДМС (QR-код для клиники)" },
+          { id: "МПД-94",  type: "feat",     team: "Design",   text: "Экран онбординга для новых застрахованных" },
+          { id: "МПД-95",  type: "fix",      team: "Mobile",   text: "Краш на Android 13 при открытии карты" },
+          { id: "МПД-96",  type: "fix",      team: "Backend",  text: "Неактуальный список клиник при отсутствии сети" },
+          { id: "МПД-97",  type: "perf",     team: "Mobile",   text: "Оффлайн-кеш справочника клиник" },
+          { id: "МПД-98",  type: "security", team: "Mobile",   text: "Биометрическая аутентификация (Face ID / Touch ID)" },
+          { id: "МПД-99",  type: "chore",    team: "DevOps",   text: "CI/CD для App Store и Google Play" },
+        ]
+      },
+      // ── УОС ─────────────────────────────────────────────────
+      {
+        project: "УОС", version: "v1.9.0", date: "2026-03-10", title: "Модуль отчётности и интеграции",
+        tasks: [
+          { id: "УОС-140", type: "feat",     team: "Backend",  text: "Отчёт по сборам в разрезе каналов продаж" },
+          { id: "УОС-141", type: "feat",     team: "Backend",  text: "Интеграция с 1С для выгрузки финансовых данных" },
+          { id: "УОС-142", type: "feat",     team: "Frontend", text: "Дашборд KPI для руководителей подразделений" },
+          { id: "УОС-143", type: "feat",     team: "Backend",  text: "Плановые vs фактические показатели: сравнение" },
+          { id: "УОС-144", type: "fix",      team: "Backend",  text: "Расхождение данных между УОС и КИАС по итогам месяца" },
+          { id: "УОС-145", type: "fix",      team: "Frontend", text: "Сводная таблица не экспортируется при >50 000 строк" },
+          { id: "УОС-146", type: "perf",     team: "Backend",  text: "Материализованные представления для сводных отчётов" },
+          { id: "УОС-147", type: "security", team: "DevOps",   text: "Разграничение доступа к финансовой отчётности по ролям" },
+          { id: "УОС-148", type: "chore",    team: "DevOps",   text: "Переход на Spring Boot 3.3" },
+        ]
+      },
+      // ── Новый ПШ ────────────────────────────────────────────
+      {
+        project: "Новый ПШ", version: "v1.2.0", date: "2026-04-01", title: "Продажный шлюз: маршрутизация и мониторинг",
+        tasks: [
+          { id: "ПШ-55",  type: "feat",     team: "Backend",  text: "Единая точка входа для всех продуктовых расчётов" },
+          { id: "ПШ-56",  type: "feat",     team: "Backend",  text: "Маршрутизация запросов по продукту и каналу" },
+          { id: "ПШ-57",  type: "feat",     team: "DevOps",   text: "Дашборд мониторинга: latency, error rate, throughput" },
+          { id: "ПШ-58",  type: "feat",     team: "Backend",  text: "Circuit breaker для интеграций с КИАС" },
+          { id: "ПШ-59",  type: "feat",     team: "Backend",  text: "Версионирование API (v1/v2 одновременно)" },
+          { id: "ПШ-60",  type: "fix",      team: "Backend",  text: "Таймаут не применяется для медленных бэкендов" },
+          { id: "ПШ-61",  type: "fix",      team: "DevOps",   text: "Алерты не срабатывают при error rate > 5%" },
+          { id: "ПШ-62",  type: "perf",     team: "Backend",  text: "Async обработка запросов (реактивный стек)" },
+          { id: "ПШ-63",  type: "security", team: "DevOps",   text: "mTLS между шлюзом и продуктовыми сервисами" },
+          { id: "ПШ-64",  type: "security", team: "Backend",  text: "Валидация JWT на уровне шлюза" },
+          { id: "ПШ-65",  type: "chore",    team: "DevOps",   text: "Helm-чарты для деплоя в Kubernetes" },
         ]
       },
       {
-        project: "release-notes",
-        version: "v2.3.0",
-        date: "2026-03-05",
-        title: "Профили пользователей и аналитика",
+        project: "Новый ПШ", version: "v1.1.0", date: "2026-02-15", title: "Базовая маршрутизация",
         tasks: [
-          { id: "USR-80", type: "feat",     team: "Backend",  text: "API профиля: аватар, bio, ссылки" },
-          { id: "USR-81", type: "feat",     team: "Backend",  text: "Эндпоинт /me с агрегированной статистикой" },
-          { id: "USR-82", type: "feat",     team: "Frontend", text: "Страница публичного профиля пользователя" },
-          { id: "USR-83", type: "feat",     team: "Frontend", text: "Редактор профиля с crop-фото" },
-          { id: "USR-84", type: "feat",     team: "Mobile",   text: "Экран профиля в мобильном приложении" },
-          { id: "USR-85", type: "feat",     team: "Mobile",   text: "Виджет активности за последние 30 дней" },
-          { id: "USR-86", type: "feat",     team: "Design",   text: "Дизайн-система: компонент Avatar (S/M/L/XL)" },
-          { id: "USR-87", type: "feat",     team: "Design",   text: "Иконки бейджей и достижений" },
-          { id: "USR-88", type: "perf",     team: "Backend",  text: "Индексы на user_id в таблицах events и sessions" },
-          { id: "USR-89", type: "perf",     team: "Frontend", text: "Lazy-load аватаров в списках" },
-          { id: "USR-90", type: "fix",      team: "Backend",  text: "Некорректная дата регистрации в UTC±0" },
-          { id: "USR-91", type: "fix",      team: "Frontend", text: "Переполнение текста в длинных именах" },
-          { id: "USR-92", type: "chore",    team: "DevOps",   text: "S3-бакет для хранения аватаров + CDN" },
-          { id: "USR-93", type: "security", team: "Backend",  text: "Rate limiting на загрузку изображений (10/мин)" },
+          { id: "ПШ-40",  type: "feat",  team: "Backend",  text: "HTTP-прокси с конфигурацией маршрутов через YAML" },
+          { id: "ПШ-41",  type: "feat",  team: "Backend",  text: "Health-check всех downstream-сервисов" },
+          { id: "ПШ-42",  type: "feat",  team: "DevOps",   text: "Логирование запросов в ELK (трейсинг по request_id)" },
+          { id: "ПШ-43",  type: "perf",  team: "Backend",  text: "Connection pool к продуктовым сервисам" },
+          { id: "ПШ-44",  type: "chore", team: "DevOps",   text: "Docker-образ на базе Eclipse Temurin 21" },
         ]
       },
     ];
@@ -260,10 +298,15 @@
     };
 
     const projectConfig = {
-      "booking":       "#0f766e",
-      "ai_gateway":    "#7c3aed",
-      "json-formatter":"#b45309",
-      "release-notes": "#2563eb",
+      "ИФЛ":            "#0f766e",
+      "Урегулирование": "#dc2626",
+      "B2B":            "#d97706",
+      "Моторы":         "#b45309",
+      "Сайт":           "#0369a1",
+      "ДМС":            "#7c3aed",
+      "МП ДМС":         "#be185d",
+      "УОС":            "#0891b2",
+      "Новый ПШ":       "#4f46e5",
     };
 
     // Populate selects
@@ -448,8 +491,8 @@
       const total = releases.reduce((s, r) => s + r.tasks.length, 0);
       document.getElementById("header-subtitle").textContent =
         projectFilter
-          ? `Проект: ${projectFilter} · ${totalCount} задач`
-          : `${allProjects.length} проектов · ${totalCount} задач`;
+          ? `Продукт: ${projectFilter} · ${totalCount} задач`
+          : `${allProjects.length} продуктов · ${totalCount} задач`;
 
       empty.style.display = anyVisible ? "none" : "block";
     }
