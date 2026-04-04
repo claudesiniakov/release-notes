@@ -56,6 +56,19 @@ header h1 {
   gap: 16px;
   position: sticky;
   top: 24px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #e0e4ea transparent;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #e0e4ea;
+  border-radius: 2px;
 }
 
 .sidebar-card {
@@ -119,6 +132,10 @@ header h1 {
   gap: 7px;
   font-size: 0.85rem;
   color: #374151;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .agg-dot {
