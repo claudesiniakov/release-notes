@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +14,14 @@
         <div class="logo-dot"></div>
         <h1>Release Notes</h1>
         <span class="subtitle" id="header-subtitle">История изменений · 9 продуктов</span>
+      </div>
+      <div class="theme-picker" id="themePicker">
+        <button class="theme-picker-btn" id="themePickerBtn">
+          <span id="tpSwatch"></span>
+          <span id="tpLabel">Light</span>
+          <span class="tp-chevron">▼</span>
+        </button>
+        <div class="theme-dropdown" id="themeDropdown"></div>
       </div>
     </div>
   </header>
@@ -590,6 +598,89 @@
     updateProjectSelect("");
     updateReleaseSelect("", "");
     applyFilters();
+
+    // ── Theme picker ──────────────────────────────────────────
+    const THEMES = [
+      { id: 'light',   name: 'Light',   desc: 'Светлая тема',    bg: '#f6f8fa', accent: '#2563eb', key: '#2563eb', str: '#16a34a', num: '#d97706' },
+      { id: 'fallout', name: 'Fallout', desc: 'Терминал Убежища', bg: '#060a04', accent: '#4af626', key: '#4af626', str: '#a8e060', num: '#7af040' },
+      { id: 'dark',    name: 'Dark',    desc: 'Тёмная ночь',     bg: '#0f1117', accent: '#4f8ef7', key: '#7dd3fc', str: '#86efac', num: '#fdba74' },
+      { id: 'monokai', name: 'Monokai', desc: 'Классика кода',   bg: '#1a1b16', accent: '#a6e22e', key: '#66d9e8', str: '#e6db74', num: '#ae81ff' },
+      { id: 'nord',    name: 'Nord',    desc: 'Северное сияние', bg: '#242933', accent: '#88c0d0', key: '#88c0d0', str: '#a3be8c', num: '#b48ead' },
+      { id: 'github',  name: 'GitHub',  desc: 'GitHub Light',    bg: '#f6f8fa', accent: '#0969da', key: '#0550ae', str: '#116329', num: '#953800' },
+    ];
+
+    const htmlEl         = document.documentElement;
+    let currentTheme     = localStorage.getItem('rn-theme') || 'light';
+    htmlEl.setAttribute('data-theme', currentTheme);
+
+    const themeDropdown  = document.getElementById('themeDropdown');
+    const themePickerBtn = document.getElementById('themePickerBtn');
+    const tpSwatch       = document.getElementById('tpSwatch');
+    const tpLabel        = document.getElementById('tpLabel');
+
+    function buildSwatchHTML(t) {
+      return `<span style="display:flex;width:20px;height:20px;border-radius:4px;overflow:hidden;position:relative;background:${t.bg};">
+        <span style="position:absolute;top:4px;left:4px;display:flex;flex-direction:column;gap:2px;">
+          <span style="width:11px;height:2px;border-radius:1px;background:${t.key};"></span>
+          <span style="width:8px;height:2px;border-radius:1px;background:${t.str};"></span>
+          <span style="width:6px;height:2px;border-radius:1px;background:${t.num};"></span>
+        </span>
+      </span>`;
+    }
+
+    function updateActiveSwatch() {
+      const t = THEMES.find(t => t.id === currentTheme) || THEMES[0];
+      tpSwatch.innerHTML = buildSwatchHTML(t);
+      tpLabel.textContent = t.name;
+      themeDropdown.querySelectorAll('.theme-option').forEach(el =>
+        el.classList.toggle('active', el.dataset.theme === currentTheme));
+    }
+
+    THEMES.forEach(t => {
+      const opt = document.createElement('div');
+      opt.className = 'theme-option';
+      opt.dataset.theme = t.id;
+      opt.innerHTML = `
+        <div class="to-preview" style="background:${t.bg};">
+          <span style="position:absolute;top:5px;left:6px;display:flex;flex-direction:column;gap:3px;">
+            <span style="width:20px;height:2px;border-radius:1px;background:${t.key};"></span>
+            <span style="width:14px;height:2px;border-radius:1px;background:${t.str};"></span>
+            <span style="width:10px;height:2px;border-radius:1px;background:${t.num};"></span>
+          </span>
+        </div>
+        <div><div class="to-name">${t.name}</div><div class="to-desc">${t.desc}</div></div>
+        <span class="to-check">✓</span>
+      `;
+      opt.addEventListener('click', () => {
+        currentTheme = t.id;
+        htmlEl.setAttribute('data-theme', currentTheme);
+        localStorage.setItem('rn-theme', currentTheme);
+        updateActiveSwatch();
+        closeThemeDropdown();
+      });
+      themeDropdown.appendChild(opt);
+    });
+
+    function closeThemeDropdown() {
+      themeDropdown.classList.remove('open');
+      themePickerBtn.classList.remove('open');
+    }
+
+    themePickerBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const isOpen = themeDropdown.classList.toggle('open');
+      themePickerBtn.classList.toggle('open', isOpen);
+    });
+
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.theme-picker')) closeThemeDropdown();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeThemeDropdown();
+    });
+
+    updateActiveSwatch();
   </script>
 </body>
 </html>
