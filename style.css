@@ -542,6 +542,13 @@ header h1 {
   flex-shrink: 0;
 }
 
+.release-owner {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 /* Task list */
 .task {
   display: flex;

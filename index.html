@@ -67,6 +67,11 @@
         </div>
 
         <div class="sidebar-card">
+          <h3>По ответственному</h3>
+          <div id="agg-owners"></div>
+        </div>
+
+        <div class="sidebar-card">
           <h3>По релизу</h3>
           <div id="agg-releases"></div>
         </div>
@@ -94,6 +99,9 @@
           </select>
           <select id="filter-type">
             <option value="">Все типы</option>
+          </select>
+          <select id="filter-owner">
+            <option value="">Все ответственные</option>
           </select>
           <button id="reset-filters">Сбросить</button>
         </div>
@@ -129,7 +137,7 @@
     const releases = [
       // ── ИФЛ ─────────────────────────────────────────────────
       {
-        project: "ИФЛ", version: "v4.2.0", date: "2026-04-01", title: "Калькулятор ИФЛ и электронный полис",
+        project: "ИФЛ", version: "v4.2.0", date: "2026-04-01", title: "Калькулятор ИФЛ и электронный полис", owner: "Иванов А.",
         tasks: [
           { id: "ИФЛ-310", type: "feat",     team: "Backend",  text: "Расчёт страховой премии по тарифной сетке 2026" },
           { id: "ИФЛ-311", type: "feat",     team: "Frontend", text: "Новый калькулятор ИФЛ с пошаговым оформлением" },
@@ -143,7 +151,7 @@
         ]
       },
       {
-        project: "ИФЛ", version: "v4.1.1", date: "2026-02-20", title: "Хотфикс пролонгации",
+        project: "ИФЛ", version: "v4.1.1", date: "2026-02-20", title: "Хотфикс пролонгации", owner: "Иванов А.",
         tasks: [
           { id: "ИФЛ-300", type: "fix", team: "Backend",  text: "Ошибка пролонгации полиса при смене страховой суммы" },
           { id: "ИФЛ-301", type: "fix", team: "Frontend", text: "Дата окончания полиса отображается на день меньше" },
@@ -152,7 +160,7 @@
       },
       // ── Урегулирование ──────────────────────────────────────
       {
-        project: "Урегулирование", version: "v3.5.0", date: "2026-03-18", title: "Автоматизация выплат и документооборот",
+        project: "Урегулирование", version: "v3.5.0", date: "2026-03-18", title: "Автоматизация выплат и документооборот", owner: "Петрова С.",
         tasks: [
           { id: "УРГ-201", type: "feat",     team: "Backend",  text: "Автоматический расчёт суммы выплаты по убытку" },
           { id: "УРГ-202", type: "feat",     team: "Backend",  text: "Интеграция с СМЭВ для получения справок" },
@@ -168,7 +176,7 @@
       },
       // ── B2B ─────────────────────────────────────────────────
       {
-        project: "B2B", version: "v2.3.0", date: "2026-03-25", title: "Портал партнёров и отчётность",
+        project: "B2B", version: "v2.3.0", date: "2026-03-25", title: "Портал партнёров и отчётность", owner: "Козлов Д.",
         tasks: [
           { id: "B2B-150", type: "feat",     team: "Frontend", text: "Личный кабинет брокера с дашбордом продаж" },
           { id: "B2B-151", type: "feat",     team: "Backend",  text: "API выгрузки реестра полисов в Excel/CSV" },
@@ -184,7 +192,7 @@
       },
       // ── Моторы ──────────────────────────────────────────────
       {
-        project: "Моторы", version: "v5.1.0", date: "2026-04-01", title: "ОСАГО онлайн и телематика",
+        project: "Моторы", version: "v5.1.0", date: "2026-04-01", title: "ОСАГО онлайн и телематика", owner: "Сидорова М.",
         tasks: [
           { id: "МТР-420", type: "feat",     team: "Backend",  text: "Расчёт ОСАГО через АИС РСА (прямой канал)" },
           { id: "МТР-421", type: "feat",     team: "Frontend", text: "Форма оформления ОСАГО за 5 минут" },
@@ -200,7 +208,7 @@
         ]
       },
       {
-        project: "Моторы", version: "v5.0.2", date: "2026-02-28", title: "Хотфикс КБМ",
+        project: "Моторы", version: "v5.0.2", date: "2026-02-28", title: "Хотфикс КБМ", owner: "Сидорова М.",
         tasks: [
           { id: "МТР-410", type: "fix", team: "Backend",  text: "КБМ сбрасывается при изменении страхователя" },
           { id: "МТР-411", type: "fix", team: "Backend",  text: "Ошибка 500 при запросе КБМ для ИП" },
@@ -209,7 +217,7 @@
       },
       // ── Сайт ────────────────────────────────────────────────
       {
-        project: "Сайт", version: "v6.4.0", date: "2026-03-15", title: "Редизайн главной и SEO",
+        project: "Сайт", version: "v6.4.0", date: "2026-03-15", title: "Редизайн главной и SEO", owner: "Новиков Е.",
         tasks: [
           { id: "СТ-330", type: "feat",  team: "Frontend", text: "Новая главная страница по дизайн-системе 3.0" },
           { id: "СТ-331", type: "feat",  team: "Frontend", text: "Блок «Онлайн-калькуляторы» с быстрым расчётом" },
@@ -225,7 +233,7 @@
       },
       // ── ДМС ─────────────────────────────────────────────────
       {
-        project: "ДМС", version: "v3.8.0", date: "2026-03-20", title: "Личный кабинет ДМС и телемедицина",
+        project: "ДМС", version: "v3.8.0", date: "2026-03-20", title: "Личный кабинет ДМС и телемедицина", owner: "Петрова С.",
         tasks: [
           { id: "ДМС-180", type: "feat",     team: "Backend",  text: "API записи к врачу через партнёрские клиники" },
           { id: "ДМС-181", type: "feat",     team: "Frontend", text: "ЛК застрахованного: история обращений и лимиты" },
@@ -241,7 +249,7 @@
       },
       // ── МП ДМС ──────────────────────────────────────────────
       {
-        project: "МП ДМС", version: "v2.1.0", date: "2026-04-01", title: "Карта клиник и уведомления",
+        project: "МП ДМС", version: "v2.1.0", date: "2026-04-01", title: "Карта клиник и уведомления", owner: "Козлов Д.",
         tasks: [
           { id: "МПД-90",  type: "feat",     team: "Mobile",   text: "Карта клиник с геолокацией и маршрутом" },
           { id: "МПД-91",  type: "feat",     team: "Mobile",   text: "Push-уведомления о записи к врачу" },
@@ -257,7 +265,7 @@
       },
       // ── УОС ─────────────────────────────────────────────────
       {
-        project: "УОС", version: "v1.9.0", date: "2026-03-10", title: "Модуль отчётности и интеграции",
+        project: "УОС", version: "v1.9.0", date: "2026-03-10", title: "Модуль отчётности и интеграции", owner: "Новиков Е.",
         tasks: [
           { id: "УОС-140", type: "feat",     team: "Backend",  text: "Отчёт по сборам в разрезе каналов продаж" },
           { id: "УОС-141", type: "feat",     team: "Backend",  text: "Интеграция с 1С для выгрузки финансовых данных" },
@@ -272,7 +280,7 @@
       },
       // ── Новый ПШ ────────────────────────────────────────────
       {
-        project: "Новый ПШ", version: "v1.2.0", date: "2026-04-01", title: "Продажный шлюз: маршрутизация и мониторинг",
+        project: "Новый ПШ", version: "v1.2.0", date: "2026-04-01", title: "Продажный шлюз: маршрутизация и мониторинг", owner: "Иванов А.",
         tasks: [
           { id: "ПШ-55",  type: "feat",     team: "Backend",  text: "Единая точка входа для всех продуктовых расчётов" },
           { id: "ПШ-56",  type: "feat",     team: "Backend",  text: "Маршрутизация запросов по продукту и каналу" },
@@ -288,7 +296,7 @@
         ]
       },
       {
-        project: "Новый ПШ", version: "v1.1.0", date: "2026-02-15", title: "Базовая маршрутизация",
+        project: "Новый ПШ", version: "v1.1.0", date: "2026-02-15", title: "Базовая маршрутизация", owner: "Иванов А.",
         tasks: [
           { id: "ПШ-40",  type: "feat",  team: "Backend",  text: "HTTP-прокси с конфигурацией маршрутов через YAML" },
           { id: "ПШ-41",  type: "feat",  team: "Backend",  text: "Health-check всех downstream-сервисов" },
@@ -332,6 +340,7 @@
     const allProjects = [...new Set(releases.map(r => r.project))].sort();
     const allTeams    = [...new Set(releases.flatMap(r => r.tasks.map(t => t.team)))].sort();
     const allTypes    = [...new Set(releases.flatMap(r => r.tasks.map(t => t.type)))].sort();
+    const allOwners   = [...new Set(releases.map(r => r.owner).filter(Boolean))].sort();
 
     allStacks.forEach(s => {
       document.getElementById("filter-stack").insertAdjacentHTML("beforeend", `<option value="${s}">${s}</option>`);
@@ -344,6 +353,9 @@
     });
     allTypes.forEach(t => {
       document.getElementById("filter-type").insertAdjacentHTML("beforeend", `<option value="${t}">${t}</option>`);
+    });
+    allOwners.forEach(o => {
+      document.getElementById("filter-owner").insertAdjacentHTML("beforeend", `<option value="${o}">${o}</option>`);
     });
 
     // Update project select based on stack filter
@@ -423,6 +435,7 @@
       renderAgg("agg-projects", t => t._project, k => projectConfig[k] || "#6b7280", "filter-project", allTasks);
       renderAgg("agg-types",    t => t.type,      k => typeConfig[k]?.color || "#6b7280", "filter-type", allTasks);
       renderAgg("agg-teams",    t => t.team,      k => teamConfig[k] || "#6b7280", "filter-team", allTasks);
+      renderAgg("agg-owners",   t => t._owner || "—", () => "#6b7280", "filter-owner", allTasks);
 
       // releases agg
       const relContainer = document.getElementById("agg-releases");
@@ -476,6 +489,7 @@
               <span class="date">${release.date}</span>
             </div>
             <h2>${release.title}</h2>
+            ${release.owner ? `<span class="release-owner">${release.owner}</span>` : ""}
             <span class="task-count">${release.tasks.length} задач</span>
             <span class="collapse-btn">▼</span>
           </div>
@@ -526,12 +540,14 @@
       const releaseFilter = document.getElementById("filter-release").value;
       const teamFilter    = document.getElementById("filter-team").value;
       const typeFilter    = document.getElementById("filter-type").value;
+      const ownerFilter   = document.getElementById("filter-owner").value;
 
       return releases.map(r => {
         if (stackFilter   && projectStack[r.project] !== stackFilter) return { ...r, tasks: [] };
         if (projectFilter && r.project !== projectFilter)             return { ...r, tasks: [] };
         const releaseKey = `${r.version}|${r.project}`;
         if (releaseFilter && releaseKey !== releaseFilter)            return { ...r, tasks: [] };
+        if (ownerFilter   && r.owner !== ownerFilter)                 return { ...r, tasks: [] };
         const tasks = r.tasks
           .filter(t => {
             if (teamFilter && t.team !== teamFilter) return false;
@@ -539,7 +555,7 @@
             if (search && !t.text.toLowerCase().includes(search) && !t.id.toLowerCase().includes(search) && !r.title.toLowerCase().includes(search)) return false;
             return true;
           })
-          .map(t => ({ ...t, _project: r.project }));
+          .map(t => ({ ...t, _project: r.project, _owner: r.owner }));
         return { ...r, tasks };
       });
     }
@@ -561,7 +577,7 @@
 
     // Highlight active selects
     function updateSelectStyles() {
-      ["filter-stack", "filter-project", "filter-release", "filter-team", "filter-type"].forEach(id => {
+      ["filter-stack", "filter-project", "filter-release", "filter-team", "filter-type", "filter-owner"].forEach(id => {
         const el = document.getElementById(id);
         el.classList.toggle("active-filter", el.value !== "");
       });
@@ -583,6 +599,7 @@
     document.getElementById("filter-release").addEventListener("change", applyFilters);
     document.getElementById("filter-team").addEventListener("change", applyFilters);
     document.getElementById("filter-type").addEventListener("change", applyFilters);
+    document.getElementById("filter-owner").addEventListener("change", applyFilters);
     document.getElementById("reset-filters").addEventListener("click", () => {
       document.getElementById("search").value = "";
       document.getElementById("filter-stack").value = "";
@@ -590,6 +607,7 @@
       document.getElementById("filter-release").value = "";
       document.getElementById("filter-team").value = "";
       document.getElementById("filter-type").value = "";
+      document.getElementById("filter-owner").value = "";
       updateProjectSelect("");
       updateReleaseSelect("", "");
       applyFilters();
