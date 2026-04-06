@@ -536,7 +536,7 @@
           .filter(t => {
             if (teamFilter && t.team !== teamFilter) return false;
             if (typeFilter && t.type !== typeFilter) return false;
-            if (search && !t.text.toLowerCase().includes(search) && !t.id.toLowerCase().includes(search)) return false;
+            if (search && !t.text.toLowerCase().includes(search) && !t.id.toLowerCase().includes(search) && !r.title.toLowerCase().includes(search)) return false;
             return true;
           })
           .map(t => ({ ...t, _project: r.project }));
