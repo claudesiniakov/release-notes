@@ -518,7 +518,10 @@ header h1 {
   padding: 3px 9px;
   border-radius: 10px;
   flex-shrink: 0;
+  text-decoration: none;
 }
+
+a.version:hover { opacity: 0.82; }
 
 .date { color: var(--text-dim); font-size: 0.8rem; flex-shrink: 0; }
 

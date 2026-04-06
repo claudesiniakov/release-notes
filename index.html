@@ -462,6 +462,11 @@
       });
     }
 
+    function formatReleaseId(date) {
+      const [y, m, d] = date.split('-');
+      return `R.${y.slice(2)}.${m}.${d}`;
+    }
+
     function renderReleases(filtered) {
       const container = document.getElementById("releases-container");
       const empty = document.getElementById("empty-state");
@@ -485,7 +490,7 @@
           <div class="release-header">
             <div class="release-meta">
               <span class="project-badge" style="background:${projColor}18;color:${projColor};border:1px solid ${projColor}30">${release.project}</span>
-              <span class="version">${release.version}</span>
+              <a class="version" href="release.html?project=${encodeURIComponent(release.project)}&version=${encodeURIComponent(release.version)}" target="_blank">${formatReleaseId(release.date)}</a>
               <span class="date">${release.date}</span>
             </div>
             <h2>${release.title}</h2>
